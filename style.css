@@ -1,0 +1,319 @@
+/* ── Reset ───────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Variables ───────────────────────────────────────────────── */
+:root {
+  --bg:          #f5f4f0;
+  --ink:         #1a1a1a;
+  --ink-faint:   rgba(26, 26, 26, 0.15);
+  --ink-mid:     rgba(26, 26, 26, 0.45);
+
+  --world-w:     4000px;
+  --world-h:     3000px;
+
+  --font-body:   Arial, Helvetica, sans-serif;
+  --font-question: 'Times New Roman', Times, serif;
+  --font-mono:   'Space Mono', 'Courier New', monospace;
+}
+
+/* ── Base ────────────────────────────────────────────────────── */
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  cursor: none;
+}
+
+/* ── World (the large floor) ─────────────────────────────────── */
+#world {
+  position: fixed;
+  width: var(--world-w);
+  height: var(--world-h);
+  top: 0;
+  left: 0;
+  will-change: transform;
+}
+
+/* ── Grid canvas (behind everything) ────────────────────────── */
+#grid {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* ── Stage (fragment container) ─────────────────────────────── */
+#stage {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+}
+
+/* ── Custom cursor ───────────────────────────────────────────── */
+#cursor {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  border: 1px solid var(--ink);
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: width 0.25s ease, height 0.25s ease, opacity 0.25s ease;
+  z-index: 1000;
+}
+
+#cursor.idle {
+  width: 22px;
+  height: 22px;
+  opacity: 0.25;
+}
+
+/* ── Trail dots ──────────────────────────────────────────────── */
+.trail-dot {
+  position: fixed;
+  width: 4px;
+  height: 4px;
+  background: var(--ink);
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  animation: trailFade 3s ease-out forwards;
+  z-index: 999;
+}
+
+@keyframes trailFade {
+  0%   { opacity: 0.3;  transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0;    transform: translate(-50%, -50%) scale(0.1); }
+}
+
+/* ── Text fragments ──────────────────────────────────────────── */
+.fragment {
+  position: absolute;
+  pointer-events: none;
+  max-width: 320px;
+  line-height: 1.55;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 1.4s ease, transform 1.4s ease;
+  user-select: none;
+  white-space: pre-line;
+}
+
+.fragment.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fragment.fading {
+  opacity: 0;
+  transform: translateY(-5px);
+  transition: opacity 2.2s ease, transform 2.2s ease;
+}
+
+/* Fragment type: question */
+.fragment.question {
+  font-family: var(--font-question);
+  color: var(--ink);
+}
+
+/* Fragment type: body */
+.fragment.body {
+  font-family: var(--font-body);
+  color: var(--ink);
+}
+
+/* Fragment type: annotation */
+.fragment.annotation {
+  font-family: var(--font-mono);
+  color: var(--ink-mid);
+  letter-spacing: 0.02em;
+}
+
+/* Sizes */
+.fragment.s   { font-size: 11px; }
+.fragment.m   { font-size: 14px; }
+.fragment.l   { font-size: 18px; }
+.fragment.xl  { font-size: 28px; line-height: 1.2; }
+
+/* ── Corner label ────────────────────────────────────────────── */
+#label {
+  position: fixed;
+  bottom: 28px;
+  left: 32px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+  z-index: 100;
+  pointer-events: none;
+}
+ 
+#label span {
+  display: block;
+  margin-top: 5px;
+  font-size: 9px;
+  opacity: 0.7;
+}
+ 
+/* ── Intro overlay ───────────────────────────────────────────── */
+#intro {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 500;
+  pointer-events: none;
+  animation: introFade 1s ease 2.8s forwards;
+}
+ 
+#intro-title {
+  font-family: var(--font-mono);
+  font-size: clamp(32px, 6vw, 72px);
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  text-align: center;
+  opacity: 0;
+  animation: titleReveal 1s ease 0.3s forwards;
+}
+ 
+@keyframes titleReveal {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+ 
+@keyframes introFade {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+/* ── Chapter images ──────────────────────────────────────────── */
+.chapter {
+  position: absolute;
+  width: 640px;
+  cursor: pointer;
+  pointer-events: all;
+}
+
+.chapter img {
+  width: 100%;
+  height: 360px;
+  object-fit: cover;
+  display: block;
+  filter: grayscale(15%);
+  transition: filter 0.4s ease, transform 0.4s ease;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.chapter:hover img {
+  filter: grayscale(0%);
+  transform: scale(1.012);
+}
+
+.chapter-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+  margin-top: 8px;
+}
+
+
+#label {
+  position: fixed;
+  bottom: 28px;
+  left: 32px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+  z-index: 100;
+  pointer-events: none;
+}
+
+#label span {
+  display: block;
+  margin-top: 5px;
+  font-size: 9px;
+  opacity: 0.7;
+}
+
+/* ── Hint ────────────────────────────────────────────────────── */
+#hint {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+  pointer-events: none;
+  transition: opacity 2.5s ease;
+  z-index: 100;
+}
+
+#hint.hidden {
+  opacity: 0;
+}
+
+/* ── Minimap ─────────────────────────────────────────────────── */
+#minimap {
+  position: fixed;
+  bottom: 28px;
+  right: 32px;
+  width: 140px;
+  height: 105px;
+  border: 1px solid var(--ink-faint);
+  pointer-events: none;
+  z-index: 100;
+  overflow: hidden;
+}
+
+#minimap-dot {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: var(--ink);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: left 0.1s, top 0.1s;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Anchor dots in minimap */
+.minimap-anchor {
+  position: absolute;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--ink);
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  pointer-events: all;
+  z-index: 1;
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+}
+
+.minimap-anchor:hover {
+  opacity: 1;
+}
+
+/* Make the whole minimap clickable */
+#minimap {
+  cursor: crosshair;
+  pointer-events: all;
+}
