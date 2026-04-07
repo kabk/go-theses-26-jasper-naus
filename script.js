@@ -1,39 +1,86 @@
+// ── Panel toggles ─────────────────────────────────────────────────────────
+const panels = document.querySelectorAll('.panel');
+
+function closeAllPanels() {
+  panels.forEach(p => p.classList.remove('open'));
+}
+
+document.getElementById('btn-info').addEventListener('click', () => {
+  const panel = document.getElementById('panel-info');
+  const isOpen = panel.classList.contains('open');
+  closeAllPanels();
+  if (!isOpen) panel.classList.add('open');
+});
+
+document.getElementById('btn-report').addEventListener('click', () => {
+  const panel = document.getElementById('panel-report');
+  const isOpen = panel.classList.contains('open');
+  closeAllPanels();
+  if (!isOpen) panel.classList.add('open');
+});
+
+document.querySelectorAll('.panel-close').forEach(btn => {
+  btn.addEventListener('click', () => closeAllPanels());
+});
+
 // ── Constants ─────────────────────────────────────────────────────────────
-const WORLD_W = 4000;
-const WORLD_H = 3000;
+const WORLD_W             = 4000;
+const WORLD_H             = 3000;
 const SPAWN_INTERVAL_BASE = 1300;
-const MAX_FRAGMENTS = 12;
-const GRID_STEP = 60;
+const MAX_FRAGMENTS       = 12;
+const GRID_STEP           = 60;
 
 // ── Chapters ───────────────────────────────────────────────────────────────
-// Each chapter is a fixed image placed in world-space.
-// x / y = top-left corner of the image in the world (4000 × 3000).
+// Images live in content/ folder (alongside index.html).
+// x / y = top-left corner of the image in world-space (4000 × 3000).
 // Adjust these coordinates freely to reposition chapters.
 const CHAPTERS = [
-  { id: "chapter-1", img: "Input/Chapter1.jpg", x:  340, y:  280  },
-  { id: "chapter-2", img: "Input/Chapter2.jpg", x: 2600, y:  420  },
-  { id: "chapter-3", img: "Input/Chapter3.jpg", x: 1200, y: 1800  },
-  { id: "chapter-4", img: "Input/Chapter4.jpg", x: 2900, y: 1600  },
-  { id: "chapter-5", img: "Input/Chapter5.jpg", x:  800, y: 2400  },
+  { id: "chapter-1", video: "content/Chapter1-The-City-as-a-Stage.mp4", x: 1200, y: 1800, label: "Chapter 1: The City as a Stage" },
+  { id: "chapter-2", video: "content/Chapter2-The-City-as-a-Stage.mp4", x: 2600, y:  420, label: "Chapter 2: Reading the Scripts" },
+  { id: "chapter-3", video: "content/Chapter3-The-City-as-a-Stage.mp4", x:  340, y:  280, label: "Chapter 3: Observing the Rules of Space" },
+  { id: "chapter-4", video: "content/Chapter4-The-City-as-a-Stage.mp4", x: 2900, y: 1600, label: "Chapter 4: Casting 'Characters'" },
+  { id: "chapter-5", video: "content/Chapter5-The-City-as-a-Stage.mp4", x:  800, y: 2400, label: "Chapter 5: Exercise of Observation 'The Decor'" },
+];
+
+// ── Hotspots ──────────────────────────────────────────────────────────────
+const HOTSPOTS = [
+  { img: "content/Character1.jpg", x:  1700, y:  200, radius: 150, w: 280 },
+  { img: "content/Character2.jpg", x:  3600, y:  200, radius: 150, w: 280 },
+  { img: "content/Character3.jpg", x:   200, y:  900, radius: 150, w: 280 },
+  { img: "content/Character4.jpg", x:  2200, y: 2800, radius: 150, w: 280 },
+  { img: "content/Character5.jpg", x:  1000, y: 2300, radius: 150, w: 280 },
+  { img: "content/Character6.jpg", x:  2200, y: 1200, radius: 150, w: 280 },
+  { img: "content/Closeup1.jpg",   x:  2000, y: 1000, radius: 150, w: 280 },
+  { img: "content/Closeup2.jpg",   x:   200, y: 1600, radius: 150, w: 280 },
+  { img: "content/Closeup3.jpg",   x:  3800, y: 1000, radius: 150, w: 280 },
+  { img: "content/Closeup4.jpg",   x:  1600, y: 2600, radius: 150, w: 280 },
+  { img: "content/Decor1.jpg",     x:  3200, y: 2400, radius: 150, w: 280 },
+  { img: "content/Decor2.jpg",     x:  1000, y: 1100, radius: 150, w: 280 },
+  { img: "content/Decor3.jpg",     x:  2600, y: 1400, radius: 150, w: 280 },
+  { img: "content/Decor4.jpg",     x:   500, y: 1900, radius: 150, w: 280 },
+  { img: "content/Decor5.jpg",     x:  3400, y:  900, radius: 150, w: 280 },
 ];
 
 // ── Elements ──────────────────────────────────────────────────────────────
-const world     = document.getElementById('world');
-const stage     = document.getElementById('stage');
-const canvas    = document.getElementById('grid');
-const cursorEl  = document.getElementById('cursor');
-const hint      = document.getElementById('hint');
+const world    = document.getElementById('world');
+const stage    = document.getElementById('stage');
+const canvas   = document.getElementById('grid');
+const cursorEl = document.getElementById('cursor');
+const hint     = document.getElementById('hint');
 
 // ── Minimap ───────────────────────────────────────────────────────────────
 const minimap = document.createElement('div');
 minimap.id = 'minimap';
 
-// Current position dot
 const minimapDot = document.createElement('div');
 minimapDot.id = 'minimap-dot';
 minimap.appendChild(minimapDot);
 
-// One anchor dot per chapter
+const minimapViewport = document.createElement('div');
+minimapViewport.id = 'minimap-viewport';
+minimap.appendChild(minimapViewport);
+
+// One numbered anchor per chapter
 CHAPTERS.forEach((ch, i) => {
   const dot = document.createElement('div');
   dot.className = 'minimap-anchor';
@@ -51,7 +98,7 @@ CHAPTERS.forEach((ch, i) => {
 
 document.body.appendChild(minimap);
 
-// ── Place chapter images in the world ─────────────────────────────────────
+// ── Place chapter videos in the world ─────────────────────────────────────
 CHAPTERS.forEach((ch) => {
   const wrap = document.createElement('div');
   wrap.className = 'chapter';
@@ -59,77 +106,116 @@ CHAPTERS.forEach((ch) => {
   wrap.style.left = ch.x + 'px';
   wrap.style.top  = ch.y + 'px';
 
-  const img = document.createElement('img');
-  img.src = ch.img;
-  img.alt = ch.id;
-  img.draggable = false;
+  const video = document.createElement('video');
+  video.src = ch.video;
+  video.muted = true;   // start muted so the browser permits the initial load
+  video.loop = true;
+  video.playsInline = true;
+  video.preload = 'auto';
+  video.draggable = false;
+
+  // Show first frame immediately
+  video.load();
+
+  // Unmute + play on hover; mute + pause on leave
+  wrap.addEventListener('mouseenter', () => {
+    video.muted = false;
+    video.play();
+  });
+  wrap.addEventListener('mouseleave', () => {
+    video.pause();
+    video.muted = true;
+  });
 
   const label = document.createElement('div');
   label.className = 'chapter-label';
-  label.textContent = ch.id.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
+  label.textContent = ch.label;
 
-  wrap.appendChild(img);
+  wrap.appendChild(video);
   wrap.appendChild(label);
   stage.appendChild(wrap);
 });
 
+// ── Build hotspot elements + crosses ──────────────────────────────────────
+HOTSPOTS.forEach((hs) => {
+  // Subtle cross marker
+  const cross = document.createElement('div');
+  cross.className = 'hotspot-cross';
+  cross.style.left = hs.x + 'px';
+  cross.style.top  = hs.y + 'px';
+  stage.appendChild(cross);
+  hs.cross = cross;
+
+  // Hidden image
+  const el       = document.createElement('div');
+  el.className   = 'hotspot';
+  el.style.left  = (hs.x - hs.w / 2) + 'px';
+  el.style.top   = (hs.y - 160) + 'px';
+  el.style.width = hs.w + 'px';
+
+  const img     = document.createElement('img');
+  img.src       = hs.img;
+  img.draggable = false;
+  el.appendChild(img);
+  stage.appendChild(el);
+  hs.el = el;
+});
+
 // ── State ─────────────────────────────────────────────────────────────────
-let screenMX = window.innerWidth  / 2;
-let screenMY = window.innerHeight / 2;
+let screenMX   = window.innerWidth  / 2;
+let screenMY   = window.innerHeight / 2;
 
-// World-space position of the viewport's top-left corner
-let camX = WORLD_W / 2 - window.innerWidth  / 2;
-let camY = WORLD_H / 2 - window.innerHeight / 2;
-
-// Target camera (for smooth panning)
+let camX       = WORLD_W / 2 - window.innerWidth  / 2;
+let camY       = WORLD_H / 2 - window.innerHeight / 2;
 let targetCamX = camX;
 let targetCamY = camY;
 
-let moved        = false;
-let lastSpawn    = 0;
-let lastTrail    = 0;
-let activeFrags  = [];
-let fragIndex    = 0;
-let idleTimer    = null;
+let moved      = false;
+let lastSpawn  = 0;
+let lastTrail  = 0;
+let activeFrags = [];
+let fragIndex  = 0;
+let idleTimer  = null;
 
 // ── Fragment data ─────────────────────────────────────────────────────────
-// type: 'question' → Times New Roman
-//       'body'     → Arial
+// type: 'question'   → Times New Roman
+//       'body'       → Arial
 //       'annotation' → Space Mono
 // size: 's' | 'm' | 'l' | 'xl'
 const FRAGMENTS = [
-  { text: "Can we see public space as a stage?",                         type: "question",    size: "l"  },
-  { text: "A place where performances constantly happen\nwithout anyone realising.",
-                                                                           type: "body",        size: "m"  },
-  { text: "pedestrian\n/pəˈdestriən/\nn. a person walking",              type: "annotation",  size: "s"  },
-  { text: "Could pedestrians be seen as performers\nthe moment they step outside?",
-                                                                           type: "question",    size: "m"  },
-  { text: "road marks\ncrossings\npavements",                             type: "annotation",  size: "s"  },
-  { text: "Scripts.",                                                      type: "question",    size: "xl" },
-  { text: "They tell us how to move.\nWhere to stop.\nThey direct.",      type: "body",        size: "m"  },
-  { text: "Do we follow because we want to —\nor because we have learned to?",
-                                                                           type: "question",    size: "m"  },
-  { text: "And what does that make me?",                                  type: "question",    size: "l"  },
-  { text: "Am I simply observing?",                                        type: "question",    size: "m"  },
-  { text: "director\nchoreographer\nwitness",                             type: "annotation",  size: "s"  },
-  { text: "Someone who reads movement.\nFrames it. Highlights it.",       type: "body",        size: "m"  },
-  { text: "The street as score.",                                          type: "question",    size: "l"  },
-  { text: "Every crossing: a cue.\nEvery pause: a rest.",                 type: "body",        size: "s"  },
-  { text: "What kind of role do we take on\nthe second we enter the street?",
-                                                                           type: "question",    size: "m"  },
-  { text: "to perform\nwithout knowing\nyou are performing",              type: "annotation",  size: "s"  },
-  { text: "The city is always watching.",                                  type: "body",        size: "m"  },
-  { text: "Or is no one watching at all?",                                 type: "question",    size: "m"  },
-  { text: "A rehearsal space.\nA testing ground.\nAn open space.",        type: "body",        size: "s"  },
-  { text: "walk.",                                                          type: "question",    size: "xl" },
-  { text: "The pavement doesn't ask you to perform.\nIt just waits.",     type: "body",        size: "m"  },
-  { text: "role\n/rəʊl/\nn. the function assumed\nin a particular situation",
-                                                                           type: "annotation",  size: "s"  },
-  { text: "You are always already on stage.",                              type: "question",    size: "l"  },
-  { text: "stage\n/steɪdʒ/\nn. a raised floor or platform\nalso: a period of development",
-                                                                           type: "annotation",  size: "s"  },
-  { text: "Who wrote the script\nyou are following right now?",           type: "question",    size: "m"  },
-  { text: "stop.",                                                          type: "question",    size: "xl" },
+  { text: "Can we see public space as a stage?",                              type: "question",       size: "l"  },
+  { text: "A place where performances constantly happen\nwithout realising.", type: "body",           size: "m"  },
+  { text: "A stage where we constantly adapt to others",                      type: "body",           size: "s"  },
+  { text: "Slowing down, speeding up, waiting, avoiding.",                    type: "annotation",     size: "m"  },
+  { text: "Could pedestrians be seen as performers\nthe moment they step outside?", type: "question", size: "m" },
+  { text: "Deciding every morning\nwhat role to play",                        type: "body",           size: "s"  },
+  { text: "Road markings become scripts",                                     type: "annotation",     size: "s"  },
+  { text: "Crossings.",                                                       type: "question",       size: "xl" },
+  { text: "Scripts tell us how to move.\nWhere to stop.\nWhere to pause.",    type: "body",           size: "m"  },
+  { text: "Follow.",                                                          type: "body",           size: "xl" },
+  { text: "Do we follow because we want to —\nor because we have learned to?", type: "question",      size: "m"  },
+  { text: "And what does that make us?",                                      type: "question",       size: "l"  },
+  { text: "Simply observing?",                                                type: "question",       size: "m"  },
+  { text: "A director\nchoreographer\naudience",                              type: "annotation",     size: "s"  },
+  { text: "Someone who reads movement.\nFrames it.\nHighlights it.",          type: "body",           size: "m"  },
+  { text: "The street as script.",                                            type: "question",       size: "l"  },
+  { text: "Every crossing: a cue.\nEvery pause: a rest.",                     type: "body",           size: "s"  },
+  { text: "What kind of role do we take on\nthe second we enter the street?", type: "question",       size: "m"  },
+  { text: "Everyday movement read as choreography",                           type: "annotation",     size: "s"  },
+  { text: "We mirror each other.",                                            type: "body",           size: "m"  },
+  { text: "Anticipate.",                                                      type: "body",           size: "xl"  },
+  { text: "Adjust.",                                                          type: "body",           size: "s"  },
+  { text: "Do you choose your role,\nor do you step into it?",                type: "question",       size: "m"  },
+  { text: "A rehearsal space.\nA testing ground.\nAn open space.",            type: "body",           size: "s"  },
+  { text: "Walk.",                                                            type: "question",       size: "xl" },
+  { text: "Pause.",                                                           type: "question",       size: "xl" },
+  { text: "We become performers.\nActors.",                                    type: "body",           size: "m"  },
+  { text: "The city already contains a choreography",                         type: "annotation",     size: "s"  },
+  { text: "You are already on stage.",                                        type: "question",       size: "l"  },
+  { text: "Stage",                                                            type: "annotation",     size: "xl" },
+  { text: "Who wrote the script\nyou are following right now?",               type: "question",       size: "m"  },
+  { text: "Stop.",                                                            type: "question",       size: "xl" },
+  { text: "Go.",                                                              type: "body",           size: "xl" },
 ];
 
 // ── Grid ──────────────────────────────────────────────────────────────────
@@ -143,19 +229,12 @@ function drawGrid() {
   ctx.lineWidth = 1;
 
   for (let x = 0; x <= WORLD_W; x += GRID_STEP) {
-    ctx.beginPath();
-    ctx.moveTo(x, 0);
-    ctx.lineTo(x, WORLD_H);
-    ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, WORLD_H); ctx.stroke();
   }
   for (let y = 0; y <= WORLD_H; y += GRID_STEP) {
-    ctx.beginPath();
-    ctx.moveTo(0, y);
-    ctx.lineTo(WORLD_W, y);
-    ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(WORLD_W, y); ctx.stroke();
   }
 
-  // Draw a subtle boundary edge
   ctx.strokeStyle = 'rgba(26,26,26,0.12)';
   ctx.lineWidth = 1;
   ctx.strokeRect(1, 1, WORLD_W - 2, WORLD_H - 2);
@@ -175,7 +254,6 @@ function applyCamera() {
   world.style.transform = `translate(${-camX}px, ${-camY}px)`;
 }
 
-// Smoothly pan so that world-point (wx, wy) is centred on screen
 function panToWorld(wx, wy) {
   const dest = clampCam(
     wx - window.innerWidth  / 2,
@@ -185,15 +263,13 @@ function panToWorld(wx, wy) {
   targetCamY = dest.y;
 }
 
-// Click anywhere on the minimap to navigate there
 minimap.addEventListener('click', (e) => {
   const rect = minimap.getBoundingClientRect();
-  const rx = (e.clientX - rect.left)  / rect.width;
-  const ry = (e.clientY - rect.top)   / rect.height;
+  const rx = (e.clientX - rect.left) / rect.width;
+  const ry = (e.clientY - rect.top)  / rect.height;
   panToWorld(rx * WORLD_W, ry * WORLD_H);
 });
 
-// World-space cursor position
 function worldX() { return screenMX + camX; }
 function worldY() { return screenMY + camY; }
 
@@ -203,6 +279,13 @@ function updateMinimap() {
   const py = (camY + window.innerHeight / 2) / WORLD_H;
   minimapDot.style.left = (px * 100) + '%';
   minimapDot.style.top  = (py * 100) + '%';
+
+const vw = (window.innerWidth  / WORLD_W * 100) + '%';
+const vh = (window.innerHeight / WORLD_H * 100) + '%';
+minimapViewport.style.width  = vw;
+minimapViewport.style.height = vh;
+minimapViewport.style.left   = (camX / WORLD_W * 100) + '%';
+minimapViewport.style.top    = (camY / WORLD_H * 100) + '%';
 }
 
 // ── Mouse input ───────────────────────────────────────────────────────────
@@ -210,7 +293,6 @@ document.addEventListener('mousemove', (e) => {
   screenMX = e.clientX;
   screenMY = e.clientY;
 
-  // Update visible cursor
   cursorEl.style.left = screenMX + 'px';
   cursorEl.style.top  = screenMY + 'px';
   cursorEl.classList.remove('idle');
@@ -220,8 +302,7 @@ document.addEventListener('mousemove', (e) => {
     hint.classList.add('hidden');
   }
 
-  // Pan camera: push world when cursor nears edges
-  const edge = 250;
+  const edge  = 250;
   const speed = 10;
   let dx = 0, dy = 0;
 
@@ -237,7 +318,6 @@ document.addEventListener('mousemove', (e) => {
   targetCamX = clamped.x;
   targetCamY = clamped.y;
 
-  // Reset idle
   clearTimeout(idleTimer);
   idleTimer = setTimeout(() => cursorEl.classList.add('idle'), 2500);
 });
@@ -249,7 +329,7 @@ function spawnTrail() {
   dot.style.left = screenMX + 'px';
   dot.style.top  = screenMY + 'px';
   document.body.appendChild(dot);
-  setTimeout(() => dot.remove(), 2000);
+  setTimeout(() => dot.remove(), 3000);
 }
 
 // ── Fragment spawn ────────────────────────────────────────────────────────
@@ -263,9 +343,8 @@ function spawnFragment() {
   el.className = `fragment ${data.type} ${data.size}`;
   el.textContent = data.text;
 
-  // Place in world-space, offset from cursor
-  const angle = Math.random() * Math.PI * 2;
-  const dist  = 100 + Math.random() * 200;
+  const angle  = Math.random() * Math.PI * 2;
+  const dist   = 100 + Math.random() * 200;
   const margin = 60;
 
   let wx = worldX() + Math.cos(angle) * dist;
@@ -279,18 +358,15 @@ function spawnFragment() {
 
   stage.appendChild(el);
 
-  // Trigger fade-in next frame
   requestAnimationFrame(() => {
     requestAnimationFrame(() => el.classList.add('visible'));
   });
 
-  // Schedule fade-out
   const linger = 7000 + Math.random() * 9000;
   setTimeout(() => fadeOut(el), linger);
 
   activeFrags.push(el);
 
-  // Cull oldest if over limit
   if (activeFrags.length > MAX_FRAGMENTS) {
     fadeOut(activeFrags.shift());
   }
@@ -304,11 +380,13 @@ function fadeOut(el) {
   activeFrags = activeFrags.filter(f => f !== el);
 }
 
-// ── Main loop ─────────────────────────────────────────────────────────────
+// ── Mobile detection ──────────────────────────────────────────────────────
+const isMobile = window.matchMedia('(max-width: 768px)').matches;
+
+// ── Main loop (desktop only) ───────────────────────────────────────────────
 function loop(ts) {
   requestAnimationFrame(loop);
 
-  // Smooth camera
   camX += (targetCamX - camX) * 0.08;
   camY += (targetCamY - camY) * 0.08;
   applyCamera();
@@ -316,13 +394,21 @@ function loop(ts) {
 
   if (!moved) return;
 
-  // Trail
+  // Hotspot proximity — reveal image, hide cross
+  const cx = worldX();
+  const cy = worldY();
+  HOTSPOTS.forEach((hs) => {
+    const dist = Math.sqrt((cx - hs.x) ** 2 + (cy - hs.y) ** 2);
+    const near = dist < hs.radius;
+    hs.el.classList.toggle('visible', near);
+    hs.cross.classList.toggle('hidden', near);
+  });
+
   if (ts - lastTrail > 55) {
     spawnTrail();
     lastTrail = ts;
   }
 
-  // Fragment
   const interval = SPAWN_INTERVAL_BASE + activeFrags.length * 180;
   if (ts - lastSpawn > interval) {
     spawnFragment();
@@ -330,4 +416,125 @@ function loop(ts) {
   }
 }
 
-requestAnimationFrame(loop);
+if (!isMobile) {
+  requestAnimationFrame(loop);
+}
+
+// ── Mobile ────────────────────────────────────────────────────────────────
+if (isMobile) {
+  // Draw the grid onto the mobile canvas
+  const mobileCanvas = document.getElementById('mobile-grid');
+  if (mobileCanvas) {
+    const drawMobileGrid = () => {
+      mobileCanvas.width  = window.innerWidth;
+      mobileCanvas.height = window.innerHeight;
+      const ctx = mobileCanvas.getContext('2d');
+      ctx.clearRect(0, 0, mobileCanvas.width, mobileCanvas.height);
+
+      ctx.strokeStyle = 'rgba(26,26,26,0.055)';
+      ctx.lineWidth = 1;
+
+      for (let x = 0; x <= mobileCanvas.width; x += GRID_STEP) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, mobileCanvas.height); ctx.stroke();
+      }
+      for (let y = 0; y <= mobileCanvas.height; y += GRID_STEP) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(mobileCanvas.width, y); ctx.stroke();
+      }
+
+      ctx.strokeStyle = 'rgba(26,26,26,0.12)';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(1, 1, mobileCanvas.width - 2, mobileCanvas.height - 2);
+    };
+
+    drawMobileGrid();
+    window.addEventListener('resize', drawMobileGrid);
+  }
+
+  // ── Screen navigation ──────────────────────────────────────────────────
+  function goToScreen(targetId) {
+    document.querySelectorAll('.field-screen').forEach(s => {
+      s.classList.remove('active');
+    });
+    const target = document.getElementById(targetId);
+    if (target) {
+      target.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  document.querySelectorAll('.field-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const next = btn.getAttribute('data-next');
+      if (next) goToScreen(next);
+    });
+  });
+
+  // ── Notes ──────────────────────────────────────────────────────────────
+  const addNoteBtn  = document.getElementById('add-note-btn');
+  const textarea    = document.querySelector('.field-textarea');
+  const notesList   = document.getElementById('notes-list');
+
+  if (addNoteBtn && textarea && notesList) {
+    addNoteBtn.addEventListener('click', () => {
+      const text = textarea.value.trim();
+      if (!text) return;
+
+      const item = document.createElement('div');
+      item.className = 'field-note-item';
+      item.textContent = text;
+      notesList.appendChild(item);
+
+      textarea.value = '';
+      textarea.focus();
+    });
+  }
+
+  // ── Overlay grid canvas ────────────────────────────────────────────────
+  const overlayGridCanvas = document.getElementById('mobile-overlay-grid');
+  if (overlayGridCanvas) {
+    const drawOverlayGrid = () => {
+      overlayGridCanvas.width  = window.innerWidth;
+      overlayGridCanvas.height = window.innerHeight;
+      const ctx = overlayGridCanvas.getContext('2d');
+      ctx.clearRect(0, 0, overlayGridCanvas.width, overlayGridCanvas.height);
+
+      ctx.strokeStyle = 'rgba(26,26,26,0.055)';
+      ctx.lineWidth = 1;
+
+      for (let x = 0; x <= overlayGridCanvas.width; x += GRID_STEP) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, overlayGridCanvas.height); ctx.stroke();
+      }
+      for (let y = 0; y <= overlayGridCanvas.height; y += GRID_STEP) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(overlayGridCanvas.width, y); ctx.stroke();
+      }
+
+      ctx.strokeStyle = 'rgba(26,26,26,0.12)';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(1, 1, overlayGridCanvas.width - 2, overlayGridCanvas.height - 2);
+    };
+    drawOverlayGrid();
+    window.addEventListener('resize', drawOverlayGrid);
+  }
+
+  // ── More overlay ───────────────────────────────────────────────────────
+  const moreBtn        = document.getElementById('mobile-more-btn');
+  const overlay        = document.getElementById('mobile-overlay');
+  const overlayClose   = document.getElementById('mobile-overlay-close');
+  const overlayContent = document.getElementById('mobile-overlay-content');
+  const reportIndex    = document.getElementById('mobile-report-index');
+  const reportSection  = document.getElementById('mobile-report-section');
+
+  if (moreBtn && overlay) {
+    moreBtn.addEventListener('click', () => {
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      if (overlayGridCanvas) overlayGridCanvas.classList.add('visible');
+    });
+
+    overlayClose.addEventListener('click', () => {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+      if (overlayGridCanvas) overlayGridCanvas.classList.remove('visible');
+    });
+  }
+}

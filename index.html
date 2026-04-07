@@ -2,27 +2,398 @@
 
 <html lang="en">
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The City as a Stage</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
+	<head>
 
-<body>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-  <div id="intro">
-    <div id="intro-title">The City as a Stage</div>
-  </div>
+		<meta name="description" content="A visual research essay on public space as performance" />
+		<meta name="keywords" content="Public Space, Performance, Choreography, Urban, Research" />
+		<meta name="author" content="The City as a Stage" />
 
-  <div id="cursor"></div>
-  <div id="hint">walk around</div>
+		<link rel="icon" href="assets/images/favicon/favicon.png" />
 
-  <div id="world">
-    <canvas id="grid"></canvas>
-    <div id="stage"></div>
-  </div>
+		<title>The City as a Stage</title>
 
-  <script src="script.js"></script>
-</body>
+		<!-- normalize first -->
+		<link rel="stylesheet" href="assets/css/normalize.css">
+		<!-- then our stylesheet -->
+		<link rel="stylesheet" href="assets/css/style.css?ver=1.0">
+
+	</head>
+
+	<body>
+
+		<!-- intro overlay -->
+		<div id="intro">
+			<div id="intro-title">The City<br> as a Stage.</div>
+		</div>
+
+		<!-- custom cursor -->
+		<div id="cursor"></div>
+
+		<!-- walk hint -->
+		<div id="hint">walk around</div>
+
+		<!-- the world: the large scrollable floor -->
+		<div id="world">
+			<canvas id="grid"></canvas>
+			<div id="stage"></div>
+		</div>
+
+		<!-- bottom UI buttons -->
+		<div id="ui-buttons">
+			<button class="ui-btn" id="btn-info">Info</button>
+			<button class="ui-btn" id="btn-report">Reflective Report</button>
+		</div>
+
+		<!-- info panel -->
+		<div class="panel" id="panel-info">
+			<button class="panel-close" data-target="panel-info">×</button>
+			<div class="panel-content">
+				<p class="panel-title">Research Website by<br><a href="https://www.jaspernaus.com" target="_blank">Jasper Naus</a></p>
+				<p>Royal Academy of Art, The Hague</p>
+				<p>This website is part of my graduation research project exploring how public space can be seen as a stage in which everyday behaviour becomes a performance.</p>
+				<p class="panel-label">Supervised by<br>Thomas Buxó<br>& François Girard-Meunier</p>
+				<p class="panel-label">2026<br>
+    			<a href="https://www.instagram.com/jaspernaus" target="_blank">@jaspernaus</a><br>
+    			<a href="/cdn-cgi/l/email-protection#1b717a686b7e69757a6e685b7c767a727735787476"><span class="__cf_email__" data-cfemail="d9b3b8aaa9bcabb7b8acaa99beb4b8b0b5f7bab6b4"><span class="__cf_email__" data-cfemail="157f74666570677b746066557278747c793b767a78">[email&#160;protected]</span></span></a>
+				</p>
+			</div>
+		</div>
+
+		<!-- reflective report panel -->
+		<div class="panel" id="panel-report">
+			<button class="panel-close" data-target="panel-report">×</button>
+
+			<!-- sticky index -->
+			<nav class="report-index">
+				<a href="#r-abstract">Abstract</a>
+				<a href="#r-intro">Introduction</a>
+				<a href="#r-development">Development</a>
+				<a href="#r-context">Context &amp; Background</a>
+				<a href="#r-discussion">Discussion &amp; Reflection</a>
+				<a href="#r-conclusion">Conclusion</a>
+				<a href="#r-bibliography">Bibliography</a>
+				<a href="#r-acknowledgements">Acknowledgements</a>
+			</nav>
+
+			<div class="panel-content">
+
+				<p class="report-main-title">The City as a Stage</p>
+				<p class="panel-title">Reflective Report by Jasper Naus</p>
+
+				<!-- Abstract -->
+				<section id="r-abstract">
+					<p class="report-heading">Abstract</p>
+					<p>What if we start seeing the city as a stage? That a red light, a crossing, a line can function as stage markings? What if people are not just passing by, but performing? Public space is usually understood as a functional environment designed to organise movement and behaviour. Roads for traffic, markings for order, getting from A to B. But I'd like to invite you to see that differently. Where road markings, crossings, traffic lights, and unwritten social conventions form spatial scripts that direct how people move, wait, and adjust to one another. This visual essay asks: how can framing high-traffic public spaces through the camera transform everyday movement into choreography?</p>
+					<p>Through a series of filmed <em>Exercises of Observation</em> in high-traffic spaces across The Hague, the camera becomes a tool for reframing the familiar. Not to stage anything new, but to reveal what's already there. The spatial scripts, the collective adjustments, the unnoticed rhythms of shared space that turn a busy street into a performance. To see each other. To acknowledge each other. And to realise that this performance only exists because of all of us.</p>
+				</section>
+
+				<!-- Introduction -->
+				<section id="r-intro">
+					<p class="report-heading">Introduction</p>
+					<p>This visual essay begins with a proposition: <em>what if we start seeing the city as a stage?</em> Public space is usually understood as a functional environment designed to organise movement and behaviour. Roads guide traffic, pavements structure pedestrian flows, and markings indicate where to stop, cross, or wait. But when observed closely, these systems begin to resemble something else: a spatial script that structures how people move through the city.<sup><a href="#fn1">1</a></sup></p>
+					<p>The essay explores how everyday movement in public space can be read as a form of choreography. By approaching the city through the camera as a stage, individuals appear as performers whose movements are shaped by spatial structures, social conventions, and the presence of others such as, stopping at a red pedestrian light or keeping to the right on a busy sidewalk.<sup><a href="#fn2">2</a></sup> These continuous adjustments create patterns that, taken together, resemble choreographed movement.</p>
+					<p>The central research question is: <strong>How can framing high-traffic public spaces through the camera transform everyday movement into choreography?</strong></p>
+					<p>To investigate this, I structured the essay as a series of filmed observations I refer to as <em>"Exercises of Observation."</em> Each sequence explores a different aspect of movement, behaviour, and spatial rules in public space. Rather than functioning as a documentary, the essay presents <strong>visual studies</strong> that isolate specific situations or gestures to reveal patterns within everyday life.</p>
+					<p>Within the context of my graduation project, this visual essay functions as a <strong>research tool</strong>: exploring ideas about movement, spatial rules, and collective behaviour through moving images. Because the project investigates movement and perception, film allows these dynamics to be experienced rather than only described. Through framing, duration, and editing, the camera becomes a tool for revealing behaviour that might otherwise remain unnoticed.</p>
+
+					<ol class="footnotes">
+						<li id="fn1">Choreographer Yvonne Rainer explored similar rule-based movement in <em>Diagonal</em> (1963), a performance in which dancers repeatedly cross the stage along a fixed diagonal path, revealing how simple spatial constraints can generate choreography.</li>
+						<li id="fn2">Urbanist William H. Whyte documented similar patterns of rule-based movement in <em>The Social Life of Small Urban Spaces</em> (1980), using time-lapse filming of New York plazas to show how pedestrians continuously adjust their paths, speed, and behaviour in response to one another and to the design of the space.</li>
+					</ol>
+				</section>
+
+				<!-- Development -->
+				<section id="r-development">
+					<p class="report-heading">Development</p>
+					<p>This essay developed from an earlier reflection on childhood in my essay <em>Imagining and Pretending</em>, in which I explored how ordinary spaces could transform through imagination alone. This resonates with play theorist Brian Sutton-Smith, who argues that play allows individuals to reinterpret and temporarily suspend the fixed meanings of their surroundings.<sup><a href="#fn3">3</a></sup> From this, I began examining road markings, pavements, spatial layouts, and unwritten social rules, recognising how these elements organise movement in everyday life.</p>
+					<p>Growing up in urban environments in Maastricht, 's-Hertogenbosch, and later The Hague shaped my sensitivity to these spatial systems, as much of my childhood play took place in built-up areas where imagination was used to reinterpret pre-defined surroundings. Early in the research, I considered staging behaviour in public space, but soon realised this would produce artificial situations, whereas my interest lies in closely observing what is already present.</p>
+					<p>This led me towards the role of observation. French novelist and filmmaker Georges Perec's detailed observations of a single location in Paris demonstrate how seemingly ordinary environments contain so much unnoticed activity.<sup><a href="#fn4">4</a></sup> From here, I began focusing on framing behaviour that already occurs, rather than constructing scenarios.</p>
+					<p>I filmed at repeated locations in The Hague like the Binnenhof Viewing Tower and other high-traffic areas such as the station, treating these places as fixed stages. Each recording was approached as an <em>'Exercise of Observation'</em> that tested how spatial structures and social conventions influence collective movement, particularly in moments of waiting, interaction, and adaptation. The Decor of the City [05:15:20] is where this hypothesis takes shape: <strong>fixed objects in public space function as stage props, directing human movement without explicit instruction.</strong> Through this process, the camera became an analytical tool. By selecting a viewpoint, defining duration, and isolating fragments of space, it determines what becomes visible as choreography.<sup><a href="#fn5">5</a></sup></p>
+					<p>While filming, I noticed that my presence as a stationary observer disrupted the space. Rather than documenting others, I became part of the scene; observed, acknowledged, and occasionally addressed by passers-by. This highlighted how everyday routines follow choreographed patterns that become visible precisely when interrupted.<sup><a href="#fn6">6</a></sup></p>
+
+					<ol class="footnotes" start="3">
+						<li id="fn3">American psychologist and play theorist Brian Sutton-Smith explored the transformative and improvisational nature of play in <em>The Ambiguity of Play</em> (1997), arguing that play allows individuals to reinterpret and temporarily suspend the fixed meanings and rules of their surroundings.</li>
+						<li id="fn4">French novelist and filmmaker Georges Perec, in <em>An Attempt at Exhausting a Place in Paris</em> (1982), observed everyday life in a single Parisian square, revealing how ordinary environments contain unnoticed patterns and activity that shape people's behaviour.</li>
+						<li id="fn5">Photographer and filmmaker Sharon Lockhart's <em>Goshogaoka</em> (1998) presents a study of everyday behaviour in a Japanese school, demonstrating how careful framing, timing, and isolation of subjects can reveal patterns and choreography.</li>
+						<li id="fn6">Dutch artists Sander Breure and Witte van Hulzen's <em>How Can We Know the Dancer From the Dance?</em> (2016) investigates how ordinary behaviour in public spaces can resemble choreography when disrupted, showing the fragile and responsive patterns of movement that structure everyday life.</li>
+					</ol>
+				</section>
+
+				<!-- Context -->
+				<section id="r-context">
+					<p class="report-heading">Context and Background</p>
+					<p>This project sits at the intersection of (visual) observation, spatial analysis, and performative thinking about everyday life. John Smith's <em>The Girl Chewing Gum</em>, for example, creates the impression that street activity is staged by pairing pedestrians and traffic with a voice-over that appears to direct their movements. By framing existing behaviour as if it were directed, Smith shows how easily everyday actions can be read as performance, a strategy that directly informs this visual essay.<sup><a href="#fn7">7</a></sup></p>
+					<p>The conceptual starting point is that everyday life already contains performative structures. Public space is organised through traffic rules, architectural layouts, and social norms — such as waiting at crossings, keeping right, forming queues — that function similarly like scripts or stage directions. People respond not only to physical structures but also to one another, generating patterns of collective movement.</p>
+					<p>The essay does not stage behaviour directly, but focuses on <strong>revealing choreography that already exists.</strong> This shifts my role from director to observer, using the camera to frame and isolate moments where spatial scripts become visible: people waiting at crossings, flows of pedestrians forming, or individuals adjusting to avoid one another.</p>
+					<p>The camera is therefore not a neutral recorder. Decisions about where to stand, what to frame, how long to observe, and what to exclude shape how movement is perceived, transforming seemingly random behaviour into readable patterns and guiding the viewer's attention to interactions that would otherwise go unnoticed. In this way, the essay shows <strong>how choreography can emerge through acts of observation</strong> [02:43:02], as individual rhythms merge into shared patterns, revealing the performative qualities of everyday movement.<sup><a href="#fn8">8</a></sup></p>
+
+					<ol class="footnotes" start="7">
+						<li id="fn7">British filmmaker John Smith's <em>The Girl Chewing Gum</em> (1976) gives the impression that ordinary street behaviour is being directed, revealing how reframing and timing can make everyday actions appear choreographed.</li>
+						<li id="fn8">German theatre collective Rimini Protokoll is known for creating site-specific and socially engaged performances. In <em>Cargo X</em> (2010), they transformed a cargo truck into a mobile theatre, turning an everyday vehicle into a stage and making visible the rhythms, interactions, and patterns of public movement that normally go unnoticed.</li>
+					</ol>
+				</section>
+
+				<!-- Discussion -->
+				<section id="r-discussion">
+					<p class="report-heading">Discussion and Reflection</p>
+					<p>The essay began with the proposition that the city could be approached as a stage, suggesting that everyday behaviour could be read as choreography through filming and editing. In spaces with clear social and spatial rules, such as crossings or traffic zones, people moved in coordinated ways that, once framed, resembled rehearsed sequences rather than random activity.</p>
+					<p>The camera was crucial in producing this reading. By remaining stationary and limiting the field of view, it isolated segments of the city and made recurring interactions visible. Movements that would normally go unnoticed became readable within a fixed frame. Editing reinforced these patterns by placing comparable situations side by side, allowing similarities to emerge across locations.</p>
+					<p>Interestingly, my presence disrupted the very flow I was documenting. Passers-by noticed the camera and adjusted their behaviour, either avoiding the frame or changing direction — which introduced an unexpected layer of performance. These moments showed that direct intervention isn't necessary for new meanings to emerge: simply choosing a position, holding a shot, and framing a scene transformed how a familiar environment could be read.</p>
+					<p>Through this process, I recognised even more that my practice is grounded in close observation and in recontextualising existing situations. Early in the research I considered staging behaviour in public space, but this felt disconnected from my interest in everyday reality and in revealing the beauty already present around us.</p>
+					<p>The essay also reshaped my understanding of design as a practice of attention rather than intervention. By isolating and presenting fragments of daily life, I make underlying systems visible that usually remain implicit. The city itself did not change, yet its appearance and meaning shifted through framing.</p>
+				</section>
+
+				<!-- Conclusion -->
+				<section id="r-conclusion">
+					<p class="report-heading">Conclusion</p>
+					<p>The essay invites viewers to see public space differently: showing that the city can be read as a stage where everyone plays a role. Some roles are larger, some smaller, but the performance exists only through the collective presence of all individuals. Even as people move with their own intentions, they continuously adjust to one another by slowing down, avoiding, following, mirroring. Each action contributes to the rhythm of the space, which shows that <strong>everyday movement in high-traffic areas is therefore a collective, choreographed performance.</strong></p>
+					<p>Ultimately, the essay demonstrates how small acts of attention can transform how we perceive familiar spaces. Public space is not just a functional environment, but a shared stage where awareness and collective presence reveal the structure and beauty already present around us.</p>
+				</section>
+
+				<!-- Bibliography -->
+				<section id="r-bibliography">
+					<p class="report-heading">Bibliography</p>
+					<ol class="bibliography">
+						<li>Breure, Sander, and Witte van Hulzen. <em>How Can We Know the Dancer From the Dance?</em> 2016. Performance.</li>
+						<li>Lockhart, Sharon. <em>Goshogaoka.</em> 1998. Film.</li>
+						<li>Perec, Georges. <em>An Attempt at Exhausting a Place in Paris.</em> 1982.</li>
+						<li>Rainer, Yvonne. <em>Diagonal.</em> 1963. Performance.</li>
+						<li>Rimini Protokoll. <em>Cargo X.</em> 2010. Performance.</li>
+						<li>Smith, John. <em>The Girl Chewing Gum.</em> 1976. Film.</li>
+						<li>Sutton-Smith, Brian. <em>The Ambiguity of Play.</em> Cambridge, MA: Harvard University Press, 1997.</li>
+						<li>Whyte, William H. <em>The Social Life of Small Urban Spaces.</em> New York: Project for Public Spaces, 1980.</li>
+					</ol>
+				</section>
+
+				<!-- Acknowledgements -->
+				<section id="r-acknowledgements">
+					<p class="report-heading">Acknowledgements</p>
+					<p>This project grew out of many conversations, shared references, and would not have been possible without the support of a lot of amazing people around me.</p>
+					<p>Firstly, I would like to thank Barbara Neves Alves, my supervisor for the Research Essay, for all her feedback, guidance, and the endless stream of references that kept me on track throughout this project. Gabriel Fontana, thank you for taking the time to chat in the early, unstructured phase of this project. For seeing its potential and for pointing me toward references I never would have found myself. Ilke Gers, thank you as well for listening so patiently, giving advice, and for generously sharing your incredibly long laundry list of references with me.</p>
+					<p>Julie, thanks to you there is something to actually look at beyond text. Thank you for trusting me with your camera so I could go out and film what I needed without worrying. To my peers, Simcha, Federico, Omid, and probably a bunch of others I'm not mentioning, thank you for always being so honest, available, and supportive. For talking things through with me, sharing snacks, keeping me level, and making sure I didn't fully spiral during stressful periods. You are all very appreciated.</p>
+				</section>
+
+			</div>
+		</div>
+
+		<!-- script at end of body -->
+	
+		<!-- mobile field tool -->
+		<div id="mobile-ui">
+			<canvas id="mobile-grid"></canvas>
+
+			<!-- More button — fixed top right -->
+			<button id="mobile-more-btn">More</button>
+
+			<!-- Mobile overlay: Info + Reflective Report -->
+			<div id="mobile-overlay">
+
+				<!-- Overlay grid canvas — drawn by JS, shows behind report section -->
+				<canvas id="mobile-overlay-grid"></canvas>
+
+				<!-- Sticky header with close -->
+				<div id="mobile-overlay-header">
+					<span id="mobile-overlay-title">The City as a Stage</span>
+					<button id="mobile-overlay-close">×</button>
+				</div>
+
+				<!-- Sticky report index (hidden until report section is reached) -->
+				<nav id="mobile-report-index">
+					<a href="#mr-abstract">Abstract</a>
+					<a href="#mr-intro">Introduction</a>
+					<a href="#mr-development">Development</a>
+					<a href="#mr-context">Context &amp; Background</a>
+					<a href="#mr-discussion">Discussion &amp; Reflection</a>
+					<a href="#mr-conclusion">Conclusion</a>
+					<a href="#mr-bibliography">Bibliography</a>
+					<a href="#mr-acknowledgements">Acknowledgements</a>
+				</nav>
+
+				<div id="mobile-overlay-content">
+
+					<!-- Info section -->
+					<section id="mobile-info-section">
+						<p class="mobile-section-heading">Info</p>
+						<p class="panel-title">Research Website by<br><a href="https://www.jaspernaus.com" target="_blank">Jasper Naus</a></p>
+						<p>Royal Academy of Art, The Hague</p>
+						<p>This website is part of my graduation research project exploring how public space can be seen as a stage in which everyday behaviour becomes a performance.</p>
+						<p class="panel-label">Supervised by<br>Thomas Buxó<br>& François Girard-Meunier</p>
+						<p class="panel-label">2026<br>
+							<a href="https://www.instagram.com/jaspernaus" target="_blank">@jaspernaus</a><br>
+							<a href="/cdn-cgi/l/email-protection#751f14060510071b140006351218141c195b161a18"><span class="__cf_email__" data-cfemail="cca6adbfbca9bea2adb9bf8caba1ada5a0e2afa3a1">[email&#160;protected]</span></a>
+						</p>
+					</section>
+
+					<!-- Reflective Report section -->
+					<section id="mobile-report-section">
+						<p class="mobile-section-heading">Reflective Report</p>
+
+						<p class="report-main-title">The City as a Stage</p>
+						<p class="panel-title">Reflective Report by Jasper Naus</p>
+
+						<section id="mr-abstract">
+							<p class="report-heading">Abstract</p>
+							<p>What if we start seeing the city as a stage? That a red light, a crossing, a line can function as stage markings? What if people are not just passing by, but performing? Public space is usually understood as a functional environment designed to organise movement and behaviour. Roads for traffic, markings for order, getting from A to B. But I'd like to invite you to see that differently. Where road markings, crossings, traffic lights, and unwritten social conventions form spatial scripts that direct how people move, wait, and adjust to one another. This visual essay asks: how can framing high-traffic public spaces through the camera transform everyday movement into choreography?</p>
+							<p>Through a series of filmed <em>Exercises of Observation</em> in high-traffic spaces across The Hague, the camera becomes a tool for reframing the familiar. Not to stage anything new, but to reveal what's already there. The spatial scripts, the collective adjustments, the unnoticed rhythms of shared space that turn a busy street into a performance. To see each other. To acknowledge each other. And to realise that this performance only exists because of all of us.</p>
+						</section>
+
+						<section id="mr-intro">
+							<p class="report-heading">Introduction</p>
+							<p>This visual essay begins with a proposition: <em>what if we start seeing the city as a stage?</em> Public space is usually understood as a functional environment designed to organise movement and behaviour. Roads guide traffic, pavements structure pedestrian flows, and markings indicate where to stop, cross, or wait. But when observed closely, these systems begin to resemble something else: a spatial script that structures how people move through the city.<sup><a href="#mfn1">1</a></sup></p>
+							<p>The essay explores how everyday movement in public space can be read as a form of choreography. By approaching the city through the camera as a stage, individuals appear as performers whose movements are shaped by spatial structures, social conventions, and the presence of others such as, stopping at a red pedestrian light or keeping to the right on a busy sidewalk.<sup><a href="#mfn2">2</a></sup> These continuous adjustments create patterns that, taken together, resemble choreographed movement.</p>
+							<p>The central research question is: <strong>How can framing high-traffic public spaces through the camera transform everyday movement into choreography?</strong></p>
+							<p>To investigate this, I structured the essay as a series of filmed observations I refer to as <em>"Exercises of Observation."</em> Each sequence explores a different aspect of movement, behaviour, and spatial rules in public space. Rather than functioning as a documentary, the essay presents <strong>visual studies</strong> that isolate specific situations or gestures to reveal patterns within everyday life.</p>
+							<p>Within the context of my graduation project, this visual essay functions as a <strong>research tool</strong>: exploring ideas about movement, spatial rules, and collective behaviour through moving images. Because the project investigates movement and perception, film allows these dynamics to be experienced rather than only described. Through framing, duration, and editing, the camera becomes a tool for revealing behaviour that might otherwise remain unnoticed.</p>
+							<ol class="footnotes">
+								<li id="mfn1">Choreographer Yvonne Rainer explored similar rule-based movement in <em>Diagonal</em> (1963), a performance in which dancers repeatedly cross the stage along a fixed diagonal path, revealing how simple spatial constraints can generate choreography.</li>
+								<li id="mfn2">Urbanist William H. Whyte documented similar patterns of rule-based movement in <em>The Social Life of Small Urban Spaces</em> (1980), using time-lapse filming of New York plazas to show how pedestrians continuously adjust their paths, speed, and behaviour in response to one another and to the design of the space.</li>
+							</ol>
+						</section>
+
+						<section id="mr-development">
+							<p class="report-heading">Development</p>
+							<p>This essay developed from an earlier reflection on childhood in my essay <em>Imagining and Pretending</em>, in which I explored how ordinary spaces could transform through imagination alone. This resonates with play theorist Brian Sutton-Smith, who argues that play allows individuals to reinterpret and temporarily suspend the fixed meanings of their surroundings.<sup><a href="#mfn3">3</a></sup> From this, I began examining road markings, pavements, spatial layouts, and unwritten social rules, recognising how these elements organise movement in everyday life.</p>
+							<p>Growing up in urban environments in Maastricht, 's-Hertogenbosch, and later The Hague shaped my sensitivity to these spatial systems, as much of my childhood play took place in built-up areas where imagination was used to reinterpret pre-defined surroundings. Early in the research, I considered staging behaviour in public space, but soon realised this would produce artificial situations, whereas my interest lies in closely observing what is already present.</p>
+							<p>This led me towards the role of observation. French novelist and filmmaker Georges Perec's detailed observations of a single location in Paris demonstrate how seemingly ordinary environments contain so much unnoticed activity.<sup><a href="#mfn4">4</a></sup> From here, I began focusing on framing behaviour that already occurs, rather than constructing scenarios.</p>
+							<p>I filmed at repeated locations in The Hague like the Binnenhof Viewing Tower and other high-traffic areas such as the station, treating these places as fixed stages. Each recording was approached as an <em>'Exercise of Observation'</em> that tested how spatial structures and social conventions influence collective movement, particularly in moments of waiting, interaction, and adaptation. The Decor of the City [05:15:20] is where this hypothesis takes shape: <strong>fixed objects in public space function as stage props, directing human movement without explicit instruction.</strong> Through this process, the camera became an analytical tool. By selecting a viewpoint, defining duration, and isolating fragments of space, it determines what becomes visible as choreography.<sup><a href="#mfn5">5</a></sup></p>
+							<p>While filming, I noticed that my presence as a stationary observer disrupted the space. Rather than documenting others, I became part of the scene; observed, acknowledged, and occasionally addressed by passers-by. This highlighted how everyday routines follow choreographed patterns that become visible precisely when interrupted.<sup><a href="#mfn6">6</a></sup></p>
+							<ol class="footnotes" start="3">
+								<li id="mfn3">American psychologist and play theorist Brian Sutton-Smith explored the transformative and improvisational nature of play in <em>The Ambiguity of Play</em> (1997), arguing that play allows individuals to reinterpret and temporarily suspend the fixed meanings and rules of their surroundings.</li>
+								<li id="mfn4">French novelist and filmmaker Georges Perec, in <em>An Attempt at Exhausting a Place in Paris</em> (1982), observed everyday life in a single Parisian square, revealing how ordinary environments contain unnoticed patterns and activity that shape people's behaviour.</li>
+								<li id="mfn5">Photographer and filmmaker Sharon Lockhart's <em>Goshogaoka</em> (1998) presents a study of everyday behaviour in a Japanese school, demonstrating how careful framing, timing, and isolation of subjects can reveal patterns and choreography.</li>
+								<li id="mfn6">Dutch artists Sander Breure and Witte van Hulzen's <em>How Can We Know the Dancer From the Dance?</em> (2016) investigates how ordinary behaviour in public spaces can resemble choreography when disrupted, showing the fragile and responsive patterns of movement that structure everyday life.</li>
+							</ol>
+						</section>
+
+						<section id="mr-context">
+							<p class="report-heading">Context and Background</p>
+							<p>This project sits at the intersection of (visual) observation, spatial analysis, and performative thinking about everyday life. John Smith's <em>The Girl Chewing Gum</em>, for example, creates the impression that street activity is staged by pairing pedestrians and traffic with a voice-over that appears to direct their movements. By framing existing behaviour as if it were directed, Smith shows how easily everyday actions can be read as performance, a strategy that directly informs this visual essay.<sup><a href="#mfn7">7</a></sup></p>
+							<p>The conceptual starting point is that everyday life already contains performative structures. Public space is organised through traffic rules, architectural layouts, and social norms — such as waiting at crossings, keeping right, forming queues — that function similarly like scripts or stage directions. People respond not only to physical structures but also to one another, generating patterns of collective movement.</p>
+							<p>The essay does not stage behaviour directly, but focuses on <strong>revealing choreography that already exists.</strong> This shifts my role from director to observer, using the camera to frame and isolate moments where spatial scripts become visible: people waiting at crossings, flows of pedestrians forming, or individuals adjusting to avoid one another.</p>
+							<p>The camera is therefore not a neutral recorder. Decisions about where to stand, what to frame, how long to observe, and what to exclude shape how movement is perceived, transforming seemingly random behaviour into readable patterns and guiding the viewer's attention to interactions that would otherwise go unnoticed. In this way, the essay shows <strong>how choreography can emerge through acts of observation</strong> [02:43:02], as individual rhythms merge into shared patterns, revealing the performative qualities of everyday movement.<sup><a href="#mfn8">8</a></sup></p>
+							<ol class="footnotes" start="7">
+								<li id="mfn7">British filmmaker John Smith's <em>The Girl Chewing Gum</em> (1976) gives the impression that ordinary street behaviour is being directed, revealing how reframing and timing can make everyday actions appear choreographed.</li>
+								<li id="mfn8">German theatre collective Rimini Protokoll is known for creating site-specific and socially engaged performances. In <em>Cargo X</em> (2010), they transformed a cargo truck into a mobile theatre, turning an everyday vehicle into a stage and making visible the rhythms, interactions, and patterns of public movement that normally go unnoticed.</li>
+							</ol>
+						</section>
+
+						<section id="mr-discussion">
+							<p class="report-heading">Discussion and Reflection</p>
+							<p>The essay began with the proposition that the city could be approached as a stage, suggesting that everyday behaviour could be read as choreography through filming and editing. In spaces with clear social and spatial rules, such as crossings or traffic zones, people moved in coordinated ways that, once framed, resembled rehearsed sequences rather than random activity.</p>
+							<p>The camera was crucial in producing this reading. By remaining stationary and limiting the field of view, it isolated segments of the city and made recurring interactions visible. Movements that would normally go unnoticed became readable within a fixed frame. Editing reinforced these patterns by placing comparable situations side by side, allowing similarities to emerge across locations.</p>
+							<p>Interestingly, my presence disrupted the very flow I was documenting. Passers-by noticed the camera and adjusted their behaviour, either avoiding the frame or changing direction — which introduced an unexpected layer of performance. These moments showed that direct intervention isn't necessary for new meanings to emerge: simply choosing a position, holding a shot, and framing a scene transformed how a familiar environment could be read.</p>
+							<p>Through this process, I recognised even more that my practice is grounded in close observation and in recontextualising existing situations. Early in the research I considered staging behaviour in public space, but this felt disconnected from my interest in everyday reality and in revealing the beauty already present around us.</p>
+							<p>The essay also reshaped my understanding of design as a practice of attention rather than intervention. By isolating and presenting fragments of daily life, I make underlying systems visible that usually remain implicit. The city itself did not change, yet its appearance and meaning shifted through framing.</p>
+						</section>
+
+						<section id="mr-conclusion">
+							<p class="report-heading">Conclusion</p>
+							<p>The essay invites viewers to see public space differently: showing that the city can be read as a stage where everyone plays a role. Some roles are larger, some smaller, but the performance exists only through the collective presence of all individuals. Even as people move with their own intentions, they continuously adjust to one another by slowing down, avoiding, following, mirroring. Each action contributes to the rhythm of the space, which shows that <strong>everyday movement in high-traffic areas is therefore a collective, choreographed performance.</strong></p>
+							<p>Ultimately, the essay demonstrates how small acts of attention can transform how we perceive familiar spaces. Public space is not just a functional environment, but a shared stage where awareness and collective presence reveal the structure and beauty already present around us.</p>
+						</section>
+
+						<section id="mr-bibliography">
+							<p class="report-heading">Bibliography</p>
+							<ol class="bibliography">
+								<li>Breure, Sander, and Witte van Hulzen. <em>How Can We Know the Dancer From the Dance?</em> 2016. Performance.</li>
+								<li>Lockhart, Sharon. <em>Goshogaoka.</em> 1998. Film.</li>
+								<li>Perec, Georges. <em>An Attempt at Exhausting a Place in Paris.</em> 1982.</li>
+								<li>Rainer, Yvonne. <em>Diagonal.</em> 1963. Performance.</li>
+								<li>Rimini Protokoll. <em>Cargo X.</em> 2010. Performance.</li>
+								<li>Smith, John. <em>The Girl Chewing Gum.</em> 1976. Film.</li>
+								<li>Sutton-Smith, Brian. <em>The Ambiguity of Play.</em> Cambridge, MA: Harvard University Press, 1997.</li>
+								<li>Whyte, William H. <em>The Social Life of Small Urban Spaces.</em> New York: Project for Public Spaces, 1980.</li>
+							</ol>
+						</section>
+
+						<section id="mr-acknowledgements">
+							<p class="report-heading">Acknowledgements</p>
+							<p>This project grew out of many conversations, shared references, and would not have been possible without the support of a lot of amazing people around me.</p>
+							<p>Firstly, I would like to thank Barbara Neves Alves, my supervisor for the Research Essay, for all her feedback, guidance, and the endless stream of references that kept me on track throughout this project. Gabriel Fontana, thank you for taking the time to chat in the early, unstructured phase of this project. For seeing its potential and for pointing me toward references I never would have found myself. Ilke Gers, thank you as well for listening so patiently, giving advice, and for generously sharing your incredibly long laundry list of references with me.</p>
+							<p>Julie, thanks to you there is something to actually look at beyond text. Thank you for trusting me with your camera so I could go out and film what I needed without worrying. To my peers, Simcha, Federico, Omid, and probably a bunch of others I'm not mentioning, thank you for always being so honest, available, and supportive. For talking things through with me, sharing snacks, keeping me level, and making sure I didn't fully spiral during stressful periods. You are all very appreciated.</p>
+						</section>
+
+					</section>
+
+				</div>
+			</div>
+
+			<div id="mobile-content">
+
+				<!-- Screen 0: Context -->
+				<div class="field-screen active" id="screen-context">
+					<div class="field-screen-inner">
+						<p class="field-label">Exercise of Observation</p>
+						<div class="field-intro-text">
+							<p class="field-intro-title">The City as a Stage</p>
+							<p class="field-body">For a while, I've been imagining the city in a different way. A stage where people aren't just passing by but are performers, following scripts written into the floor, the lights, the rules of shared space. I like to invite you to see that too.</p>
+							<p class="field-body">Go outside, find a busy place and let the show begin.</p>
+						</div>
+					</div>
+					<div class="field-btn-wrap">
+						<button class="field-btn" data-next="screen-step1">I'm outside</button>
+					</div>
+				</div>
+
+				<!-- Screen 1: Identify -->
+				<div class="field-screen" id="screen-step1">
+					<div class="field-screen-inner">
+						<p class="field-exercise-number">01</p>
+						<p class="field-label">Identify the space</p>
+						<div class="field-card">
+							<p class="field-heading">Stand still.</p>
+							<p class="field-body">Find a spot and stay there for five minutes. This is your new stage. Find its rhythm, scripts and the flow of people entering and leaving.</p>
+							<p class="field-body">What keeps everyone in order? What unwritten rules become noticeable? </p>
+							<!-- <p class="field-annotation">5 minutes have passed</p> -->
+						</div>
+					</div>
+					<div class="field-btn-wrap">
+						<button class="field-btn" data-next="screen-step2">Five minutes have passed</button>
+					</div>
+				</div>
+
+				<!-- Screen 2: Observe -->
+				<div class="field-screen" id="screen-step2">
+					<div class="field-screen-inner">
+						<p class="field-exercise-number">02</p>
+						<p class="field-label">Observe the space</p>
+						<div class="field-card">
+							<p class="field-heading">Look closer.</p>
+							<p class="field-body">Who are the performers? What are the scripts — the lines on the floor, the lights, the unspoken agreements — that direct how people move?</p>
+							<p class="field-body">Write down what you see. A gesture. A pattern. A moment of adjustment between two strangers.</p>
+							<div class="field-notes-area">
+								<textarea class="field-textarea" placeholder="Note something down..."></textarea>
+								<button class="field-add-btn" id="add-note-btn">+ Add observation</button>
+								<div class="field-notes-list" id="notes-list"></div>
+							</div>
+						</div>
+					</div>
+					<div class="field-btn-wrap">
+						<button class="field-btn" data-next="screen-step3">Continue</button>
+					</div>
+				</div>
+
+				<!-- Screen 3: Enter -->
+				<div class="field-screen" id="screen-step3">
+					<div class="field-screen-inner">
+						<p class="field-exercise-number">03</p>
+						<p class="field-label">Enter the space</p>
+						<div class="field-card">
+							<p class="field-heading">Now walk in.</p>
+							<p class="field-body">Leave your watching position. Step into the space you have been observing.</p>
+							<p class="field-body">Feel how the scripts take hold. Notice the moment you stop directing and start following.</p>
+							<p class="field-annotation">You are no longer the observer.<br>You are the performance.</p>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+		<script type="text/javascript" src="assets/js/script.js?ver=1.0"></script>
+
+	</body>
+
 </html>

@@ -1,23 +1,34 @@
-/* ── Reset ───────────────────────────────────────────────────── */
+@charset "UTF-8";
+
+/* ── Reset (normalize.css handles most, we add box-sizing) ───── */
 *, *::before, *::after {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
 }
 
 /* ── Variables ───────────────────────────────────────────────── */
 :root {
-  --bg:          #f5f4f0;
-  --ink:         #1a1a1a;
-  --ink-faint:   rgba(26, 26, 26, 0.15);
-  --ink-mid:     rgba(26, 26, 26, 0.45);
+  /* Colors */
+  --color-background:       #f5f4f0;
+  --color-ink:              #1a1a1a;
+  --color-ink-faint:        rgba(26, 26, 26, 0.15);
+  --color-ink-mid:          rgba(26, 26, 26, 0.45);
 
-  --world-w:     4000px;
-  --world-h:     3000px;
+  /* Fonts — everyday typefaces */
+  --font-body:              Arial, Helvetica, sans-serif;
+  --font-question:          'Times New Roman', Times, serif;
+  --font-mono:              'Space Mono', 'Courier New', monospace;
 
-  --font-body:   Arial, Helvetica, sans-serif;
-  --font-question: 'Times New Roman', Times, serif;
-  --font-mono:   'Space Mono', 'Courier New', monospace;
+  /* World dimensions */
+  --world-w:                4000px;
+  --world-h:                3000px;
+
+  /* Spacing */
+  --margin:                 1rem;
+  --margin-xs:              calc(var(--margin) * 0.5);
+  --margin-s:               calc(var(--margin) * 1);
+  --margin-m:               calc(var(--margin) * 2);
+  --margin-l:               calc(var(--margin) * 3);
+  --margin-xl:              calc(var(--margin) * 5);
 }
 
 /* ── Base ────────────────────────────────────────────────────── */
@@ -25,8 +36,13 @@ html, body {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: var(--bg);
+  background: var(--color-background);
   cursor: none;
+}
+
+/* Hide the title line break on desktop */
+#intro-title br {
+  display: none;
 }
 
 /* ── World (the large floor) ─────────────────────────────────── */
@@ -39,7 +55,7 @@ html, body {
   will-change: transform;
 }
 
-/* ── Grid canvas (behind everything) ────────────────────────── */
+/* ── Grid canvas ─────────────────────────────────────────────── */
 #grid {
   position: absolute;
   inset: 0;
@@ -48,7 +64,7 @@ html, body {
   pointer-events: none;
 }
 
-/* ── Stage (fragment container) ─────────────────────────────── */
+/* ── Stage (fragment + chapter container) ────────────────────── */
 #stage {
   position: absolute;
   inset: 0;
@@ -60,7 +76,7 @@ html, body {
   position: fixed;
   width: 10px;
   height: 10px;
-  border: 1px solid var(--ink);
+  border: 1px solid var(--color-ink);
   border-radius: 50%;
   pointer-events: none;
   transform: translate(-50%, -50%);
@@ -79,7 +95,7 @@ html, body {
   position: fixed;
   width: 4px;
   height: 4px;
-  background: var(--ink);
+  background: var(--color-ink);
   border-radius: 50%;
   pointer-events: none;
   transform: translate(-50%, -50%);
@@ -88,8 +104,12 @@ html, body {
   z-index: 999;
 }
 
+@media (max-width: 768px) {
+  .trail-dot { display: none; }
+}
+
 @keyframes trailFade {
-  0%   { opacity: 0.3;  transform: translate(-50%, -50%) scale(1); }
+  0%   { opacity: 0.3;  transform: translate(-50%, -50%) scale(1);   }
   100% { opacity: 0;    transform: translate(-50%, -50%) scale(0.1); }
 }
 
@@ -104,6 +124,7 @@ html, body {
   transition: opacity 1.4s ease, transform 1.4s ease;
   user-select: none;
   white-space: pre-line;
+  z-index: 20;
 }
 
 .fragment.visible {
@@ -117,52 +138,53 @@ html, body {
   transition: opacity 2.2s ease, transform 2.2s ease;
 }
 
-/* Fragment type: question */
-.fragment.question {
-  font-family: var(--font-question);
-  color: var(--ink);
+/* Fragment types */
+.fragment.question   { font-family: var(--font-question); color: var(--color-ink); }
+.fragment.body       { font-family: var(--font-body);     color: var(--color-ink); }
+.fragment.annotation { font-family: var(--font-mono);     color: var(--color-ink-mid); letter-spacing: 0.02em; }
+
+/* Fragment sizes */
+.fragment.s  { font-size: 11px; }
+.fragment.m  { font-size: 14px; }
+.fragment.l  { font-size: 18px; }
+.fragment.xl { font-size: 28px; line-height: 1.2; }
+
+/* ── Chapter images ──────────────────────────────────────────── */
+.chapter {
+  position: absolute;
+  width: 640px;
+  cursor: pointer;
+  pointer-events: all;
 }
 
-/* Fragment type: body */
-.fragment.body {
-  font-family: var(--font-body);
-  color: var(--ink);
+.chapter img,
+.chapter video {
+  width: 100%;
+  height: 360px;
+  object-fit: cover;
+  display: block;
+  filter: grayscale(15%);
+  transition: filter 0.4s ease, transform 0.4s ease;
+  user-select: none;
+  -webkit-user-drag: none;
+  opacity: 1;           /* always visible — first frame acts as poster */
 }
 
-/* Fragment type: annotation */
-.fragment.annotation {
-  font-family: var(--font-mono);
-  color: var(--ink-mid);
-  letter-spacing: 0.02em;
+.chapter:hover img,
+.chapter:hover video {
+  filter: grayscale(0%);
+  transform: scale(1.012);
 }
 
-/* Sizes */
-.fragment.s   { font-size: 11px; }
-.fragment.m   { font-size: 14px; }
-.fragment.l   { font-size: 18px; }
-.fragment.xl  { font-size: 28px; line-height: 1.2; }
-
-/* ── Corner label ────────────────────────────────────────────── */
-#label {
-  position: fixed;
-  bottom: 28px;
-  left: 32px;
+.chapter-label {
   font-family: var(--font-mono);
   font-size: 10px;
-  letter-spacing: 0.1em;
-  color: var(--ink-faint);
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  z-index: 100;
-  pointer-events: none;
+  color: var(--color-ink-mid);
+  margin-top: 8px;
 }
- 
-#label span {
-  display: block;
-  margin-top: 5px;
-  font-size: 9px;
-  opacity: 0.7;
-}
- 
+
 /* ── Intro overlay ───────────────────────────────────────────── */
 #intro {
   position: fixed;
@@ -174,79 +196,26 @@ html, body {
   pointer-events: none;
   animation: introFade 1s ease 2.8s forwards;
 }
- 
+
 #intro-title {
   font-family: var(--font-mono);
   font-size: clamp(32px, 6vw, 72px);
-  color: var(--ink);
+  color: var(--color-ink);
   letter-spacing: -0.01em;
   text-align: center;
+  /* text-decoration: underline; */
   opacity: 0;
   animation: titleReveal 1s ease 0.3s forwards;
 }
- 
+
 @keyframes titleReveal {
   from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0);    }
 }
- 
+
 @keyframes introFade {
   from { opacity: 1; }
   to   { opacity: 0; }
-}
-
-/* ── Chapter images ──────────────────────────────────────────── */
-.chapter {
-  position: absolute;
-  width: 640px;
-  cursor: pointer;
-  pointer-events: all;
-}
-
-.chapter img {
-  width: 100%;
-  height: 360px;
-  object-fit: cover;
-  display: block;
-  filter: grayscale(15%);
-  transition: filter 0.4s ease, transform 0.4s ease;
-  user-select: none;
-  -webkit-user-drag: none;
-}
-
-.chapter:hover img {
-  filter: grayscale(0%);
-  transform: scale(1.012);
-}
-
-.chapter-label {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--ink-mid);
-  margin-top: 8px;
-}
-
-
-#label {
-  position: fixed;
-  bottom: 28px;
-  left: 32px;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  color: var(--ink-faint);
-  text-transform: uppercase;
-  z-index: 100;
-  pointer-events: none;
-}
-
-#label span {
-  display: block;
-  margin-top: 5px;
-  font-size: 9px;
-  opacity: 0.7;
 }
 
 /* ── Hint ────────────────────────────────────────────────────── */
@@ -258,7 +227,7 @@ html, body {
   font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 0.2em;
-  color: var(--ink-faint);
+  color: var(--color-ink-faint);
   text-transform: uppercase;
   pointer-events: none;
   transition: opacity 2.5s ease;
@@ -274,19 +243,20 @@ html, body {
   position: fixed;
   bottom: 28px;
   right: 32px;
-  width: 140px;
-  height: 105px;
-  border: 1px solid var(--ink-faint);
-  pointer-events: none;
+  width: 180px;
+  height: 135px;
+  border: 1px solid var(--color-ink-faint);
   z-index: 100;
   overflow: hidden;
+  cursor: crosshair;
+  pointer-events: all;
 }
 
 #minimap-dot {
   position: absolute;
   width: 3px;
   height: 3px;
-  background: var(--ink);
+  background: var(--color-ink);
   border-radius: 50%;
   transform: translate(-50%, -50%);
   transition: left 0.1s, top 0.1s;
@@ -294,12 +264,18 @@ html, body {
   pointer-events: none;
 }
 
-/* Anchor dots in minimap */
+#minimap-viewport {
+  position: absolute;
+  border: 1px solid var(--color-ink-faint);
+  pointer-events: none;
+  z-index: 1;
+}
+
 .minimap-anchor {
   position: absolute;
   font-family: var(--font-mono);
-  font-size: 9px;
-  color: var(--ink);
+  font-size: 10px;
+  color: var(--color-ink);
   transform: translate(-50%, -50%);
   cursor: pointer;
   pointer-events: all;
@@ -311,9 +287,857 @@ html, body {
 .minimap-anchor:hover {
   opacity: 1;
 }
+/* ── UI Buttons ──────────────────────────────────────────────── */
+#ui-buttons {
+  position: fixed;
+  bottom: 28px;
+  right: 224px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  z-index: 100;
+}
 
-/* Make the whole minimap clickable */
-#minimap {
-  cursor: crosshair;
+.ui-btn {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+  background: transparent;
+  border: 1px solid var(--color-ink-faint);
+  padding: 5px 10px;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s ease, border-color 0.2s ease;
+}
+
+.ui-btn:hover {
+  opacity: 1;
+  border-color: var(--color-ink);
+}
+
+/* ── Panels ──────────────────────────────────────────────────── */
+.panel {
+  position: fixed;
+  bottom: 185px;
+  right: 32px;
+  width: 320px;
+  max-height: 60vh;
+  background: rgba(245, 244, 240, 0.6);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--color-ink-faint);
+  padding: 28px 28px 24px;
+  z-index: 200;
+  overflow-y: auto;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.panel.open {
+  opacity: 1;
   pointer-events: all;
+  transform: translateY(0);
+}
+
+.panel-close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--color-ink-mid);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  transition: color 0.2s ease;
+}
+
+.panel-close:hover {
+  color: var(--color-ink);
+}
+
+.panel-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ── Panel typography ────────────────────────────────────────── */
+.panel-content p {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  line-height: 1.75;
+  color: var(--color-ink);
+  margin: 0;
+}
+
+.panel-content strong {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.panel-content em {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.panel-title {
+  font-family: var(--font-mono) !important;
+  font-size: 10px !important;
+  font-style: normal !important;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ink-mid) !important;
+  padding-bottom: 4px;
+}
+
+.panel-label {
+  font-family: var(--font-mono) !important;
+  font-size: 10px !important;
+  font-style: normal !important;
+  color: var(--color-ink-mid) !important;
+  letter-spacing: 0.05em;
+}
+
+.panel-content a {
+  color: var(--color-ink-mid);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.panel-content a:hover {
+  color: var(--color-ink);
+}
+
+.panel-content a:hover {
+  border-color: var(--color-ink);
+}
+/* Report main title */
+.report-main-title {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+  margin: 0 0 4px 0;
+}
+
+/* Report panel layout ─────────────────────────────────────── */
+#panel-report {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+#panel-report .panel-close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  z-index: 10;
+}
+
+/* Sticky index nav */
+.report-index {
+  position: sticky;
+  top: 0;
+  background: rgba(245, 244, 240, 0.95);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--color-ink-faint);
+  padding: 12px 28px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 14px;
+  z-index: 5;
+  flex-shrink: 0;
+}
+
+.report-index a {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ink-mid);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  white-space: nowrap;
+}
+
+.report-index a:hover {
+  color: var(--color-ink);
+}
+
+/* Report content area */
+#panel-report .panel-content {
+  padding: 24px 28px 32px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Section headings */
+.report-heading {
+  font-family: var(--font-mono) !important;
+  font-size: 9px !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  color: var(--color-ink-mid) !important;
+  margin-top: 32px !important;
+  margin-bottom: 12px !important;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-ink-faint);
+}
+
+section:first-of-type .report-heading {
+  margin-top: 8px !important;
+  border-top: none;
+}
+
+/* Footnotes */
+.footnotes {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  line-height: 1.7;
+  color: var(--color-ink-mid);
+  margin: 20px 0 0 0;
+  padding-left: 20px;
+  list-style-type: decimal;
+}
+
+.footnotes li {
+  margin-bottom: 6px;
+}
+
+.footnotes em {
+  font-style: italic;
+}
+
+/* Footnote superscript links */
+sup a {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--color-ink-mid);
+  text-decoration: none;
+  vertical-align: super;
+  line-height: 0;
+  transition: color 0.2s ease;
+}
+
+sup a:hover {
+  color: var(--color-ink);
+}
+
+/* Bibliography */
+.bibliography {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  line-height: 1.75;
+  color: var(--color-ink);
+  padding-left: 20px;
+  margin: 0;
+}
+
+.bibliography li {
+  margin-bottom: 6px;
+}
+
+.bibliography em {
+  font-style: italic;
+}
+.hotspot {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  z-index: 5;
+}
+
+.hotspot.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hotspot img {
+  width: 100%;
+  height: auto;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* ── Hotspot crosses ─────────────────────────────────────────── */
+.hotspot-cross {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: 0.4;
+  transition: opacity 0.6s ease;
+  z-index: 6;
+}
+
+.hotspot-cross::before,
+.hotspot-cross::after {
+  content: '';
+  position: absolute;
+  background: var(--color-ink);
+}
+
+/* horizontal bar */
+.hotspot-cross::before {
+  width: 10px;
+  height: 1px;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+}
+
+/* vertical bar */
+.hotspot-cross::after {
+  width: 1px;
+  height: 10px;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+}
+
+.hotspot-cross.hidden {
+  opacity: 0;
+}
+/* ═══════════════════════════════════════════════════════════════
+   MOBILE  (max-width: 768px)
+   ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+  /* Hide all desktop-only elements */
+  #world,
+  #cursor,
+  #minimap,
+  #ui-buttons,
+  .panel {
+    display: none !important;
+  }
+
+  /* Let body scroll normally on mobile */
+  html, body {
+    overflow: auto;
+    height: auto;
+    cursor: auto;
+  }
+
+  /* Intro — grid visible behind, title on top */
+  #intro {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 500;
+    pointer-events: none;
+    background: var(--color-background);
+    animation: introFade 1s ease 2.8s forwards;
+  }
+
+  /* Hint hidden on mobile */
+  #hint {
+    display: none;
+  }
+
+  /* Show title line break on mobile */
+  #intro-title br {
+    display: block;
+  }
+
+  /* ── Mobile UI shell ───────────────────────────────────────── */
+  #mobile-ui {
+    position: relative;
+    min-height: 100vh;
+    width: 100%;
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Grid canvas — fixed behind everything, same opacity as desktop */
+  #mobile-grid {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Background colour sits behind the grid */
+  body {
+    background: var(--color-background);
+  }
+
+  /* Content sits above the grid */
+  #mobile-content {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 0 0 80px 0;
+  }
+
+  /* Intro title — larger, two-line layout */
+  #intro-title {
+    font-family: var(--font-mono);
+    font-size: clamp(36px, 11vw, 64px);
+    color: var(--color-ink);
+    letter-spacing: -0.01em;
+    text-align: center;
+    line-height: 1.1;
+    opacity: 0;
+    animation: titleReveal 1s ease 0.3s forwards;
+  }
+
+  /* ── More button ───────────────────────────────────────────── */
+  #mobile-more-btn {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 50;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-ink);
+    background: var(--color-background);
+    border: 1px solid var(--color-ink-faint);
+    padding: 8px 14px;
+    cursor: pointer;
+    border-radius: 20px;
+    transition: border-color 0.2s ease;
+  }
+
+  #mobile-more-btn:active {
+    border-color: var(--color-ink);
+  }
+
+  /* ── Mobile overlay ────────────────────────────────────────── */
+  #mobile-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: var(--color-background);
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(16px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    overflow: hidden;
+  }
+
+  /* Grid canvas inside the overlay — only visible on report section */
+  #mobile-overlay-grid {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  #mobile-overlay-grid.visible {
+    opacity: 1;
+  }
+
+  #mobile-overlay.open {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateY(0);
+  }
+
+  /* Sticky header */
+  #mobile-overlay-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--color-background);
+    border-bottom: 1px solid var(--color-ink-faint);
+    padding: 22px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+
+  #mobile-overlay-title {
+    font-family: var(--font-mono);
+    font-size: 15px;
+    letter-spacing: 0.02em;
+    color: var(--color-ink);
+  }
+
+  #mobile-overlay-close {
+    font-family: var(--font-mono);
+    font-size: 20px;
+    color: var(--color-ink-mid);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    transition: color 0.2s ease;
+  }
+
+  #mobile-overlay-close:active {
+    color: var(--color-ink);
+  }
+
+  /* Sticky report index — hidden by default, shown on scroll */
+  #mobile-report-index {
+    position: sticky;
+    top: 61px;
+    z-index: 9;
+    background: var(--color-background);
+    border-bottom: 1px solid var(--color-ink-faint);
+    padding: 16px 28px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-flow: column;
+    grid-template-rows: repeat(4, auto);
+    column-gap: 16px;
+    row-gap: 10px;
+    flex-shrink: 0;
+    opacity: 1;
+    pointer-events: all;
+    transition: opacity 0.3s ease;
+  }
+
+  #mobile-report-index a {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-ink-mid);
+    text-decoration: none;
+    transition: color 0.2s ease;
+    padding: 2px 0;
+  }
+
+  #mobile-report-index a:active {
+    color: var(--color-ink);
+  }
+
+  /* Scrollable content area */
+  #mobile-overlay-content {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 32px 24px 60px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Report section gets a transparent background so overlay grid shows */
+  #mobile-report-section {
+    position: relative;
+  }
+
+  #mobile-report-section::before {
+    content: "";
+    position: absolute;
+    inset: -32px -24px;
+    background: transparent;
+    z-index: -1;
+  }
+
+  /* Section divider heading */
+  .mobile-section-heading {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-ink-mid);
+    margin: 0 0 24px 0;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--color-ink-faint);
+  }
+
+  /* Info section spacing */
+  #mobile-info-section {
+    margin-bottom: 48px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid var(--color-ink-faint);
+  }
+
+  #mobile-info-section p {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    line-height: 1.75;
+    color: var(--color-ink);
+    margin: 0 0 16px 0;
+  }
+
+  #mobile-info-section a {
+    color: var(--color-ink-mid);
+    text-decoration: none;
+  }
+
+  /* Report section */
+  #mobile-report-section p {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    line-height: 1.75;
+    color: var(--color-ink);
+    margin: 0 0 16px 0;
+  }
+
+  #mobile-report-section section {
+    margin-bottom: 8px;
+  }
+
+  #mobile-report-section .report-heading {
+    font-size: 22px !important;
+    letter-spacing: -0.01em !important;
+    text-transform: none !important;
+    color: var(--color-ink) !important;
+    margin-top: 40px !important;
+    margin-bottom: 16px !important;
+    padding-top: 24px;
+  }
+
+  #mobile-report-section section:first-of-type .report-heading {
+    border-top: none;
+    margin-top: 8px !important;
+    padding-top: 0;
+  }
+
+  /* ── Field screens ─────────────────────────────────────────── */
+  .field-screen {
+    display: none;
+    min-height: 100vh;
+    width: 100%;
+    box-sizing: border-box;
+    position: relative;
+  }
+
+  .field-screen.active {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .field-screen-inner {
+    flex: 1;
+    padding: 72px 32px 160px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  /* ── Exercise number — large graphic watermark ─────────────── */
+  .field-exercise-number {
+    font-family: var(--font-mono);
+    font-size: clamp(100px, 28vw, 140px);
+    color: var(--color-ink-faint);
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    margin: 0 0 4px -5px;
+    user-select: none;
+  }
+
+  /* Intro screen title */
+  .field-intro-text {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .field-intro-title {
+    font-family: var(--font-mono);
+    font-size: clamp(32px, 9vw, 52px);
+    color: var(--color-ink);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+
+  /* Exercise label — small, sits under the number */
+  .field-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-ink-mid);
+    margin: 0 0 32px 0;
+  }
+
+  /* ── Card — light grey frame with rounded corners ──────────── */
+  .field-card {
+    background: rgba(26, 26, 26, 0.05);
+    border-radius: 16px;
+    padding: 28px 24px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* Main heading */
+  .field-heading {
+    font-family: var(--font-mono);
+    font-size: clamp(44px, 12vw, 60px);
+    color: var(--color-ink);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+
+  /* Body */
+  .field-body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    line-height: 1.75;
+    color: var(--color-ink);
+    margin: 0;
+  }
+
+  /* Annotation */
+  .field-annotation {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-ink-mid);
+    margin: 24px 0 0 0;
+  }
+
+  /* ── Button — fixed to bottom of screen ────────────────────── */
+  .field-btn-wrap {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 32px 32px 48px;
+    background: linear-gradient(to bottom, transparent, var(--color-background) 35%);
+    z-index: 10;
+    display: none;
+    text-align: center;
+  }
+
+  .field-screen.active .field-btn-wrap {
+    display: block;
+  }
+
+  .field-btn {
+    display: inline-block;
+    width: auto;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-background);
+    background: var(--color-ink);
+    border: none;
+    padding: 18px 36px;
+    cursor: pointer;
+    border-radius: 40px;
+    transition: opacity 0.15s ease;
+  }
+
+  .field-btn:active {
+    opacity: 0.65;
+  }
+
+  /* ── Notes area ────────────────────────────────────────────── */
+  .field-notes-area {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  .field-textarea {
+    width: 100%;
+    min-height: 100px;
+    background: transparent;
+    border: 1px solid var(--color-ink-faint);
+    padding: 14px 16px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--color-ink);
+    resize: none;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease;
+    /* -webkit-appearance: none; */
+    border-radius: 12px;
+  }
+
+  .field-textarea::placeholder {
+    color: var(--color-ink-mid);
+  }
+
+  .field-textarea:focus {
+    border-color: var(--color-ink-mid);
+  }
+
+  .field-add-btn {
+    align-self: flex-end;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-ink-mid);
+    background: transparent;
+    border: none;
+    padding: 4px 0;
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+
+  .field-add-btn:active {
+    color: var(--color-ink);
+  }
+
+  .field-notes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 40px;
+  }
+
+  .field-note-item {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--color-ink);
+    padding: 10px 14px;
+    border: 1px solid var(--color-ink-faint);
+    border-radius: 8px;
+    animation: noteAppear 0.4s ease forwards;
+  }
+
+  @keyframes noteAppear {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+}
+
+/* Hide mobile UI on desktop */
+#mobile-ui {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  #mobile-ui {
+    display: block;
+  }
 }
