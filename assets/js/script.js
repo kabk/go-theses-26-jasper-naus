@@ -450,6 +450,24 @@ if (isMobile) {
     window.addEventListener('resize', drawMobileGrid);
   }
 
+  // ── Notes ─────────────────────────────────────────────────────────────
+  const addNoteBtn  = document.getElementById('add-note-btn-characters');
+  const textarea    = document.getElementById('textarea-characters');
+  const notesList   = document.getElementById('notes-list-characters');
+
+  if (addNoteBtn && textarea && notesList) {
+    addNoteBtn.addEventListener('click', () => {
+      const text = textarea.value.trim();
+      if (!text) return;
+      const item = document.createElement('div');
+      item.className = 'field-note-item';
+      item.textContent = text;
+      notesList.appendChild(item);
+      textarea.value = '';
+      textarea.focus();
+    });
+  }
+
   // ── Screen navigation ──────────────────────────────────────────────────
   function goToScreen(targetId) {
     document.querySelectorAll('.field-screen').forEach(s => {
