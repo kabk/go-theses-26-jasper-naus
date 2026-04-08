@@ -36,10 +36,10 @@ const GRID_STEP           = 60;
 // Adjust these coordinates freely to reposition chapters.
 const CHAPTERS = [
   { id: "chapter-1", video: "content/Chapter1-The-City-as-a-Stage.mp4", x: 1200, y: 1800, label: "Chapter 1: The City as a Stage" },
-  { id: "chapter-2", video: "content/Chapter2-The-City-as-a-Stage.mp4", x: 2600, y:  420, label: "Chapter 2: Reading the Scripts" },
-  { id: "chapter-3", video: "content/Chapter3-The-City-as-a-Stage.mp4", x:  340, y:  280, label: "Chapter 3: Observing the Rules of Space" },
-  { id: "chapter-4", video: "content/Chapter4-The-City-as-a-Stage.mp4", x: 2900, y: 1600, label: "Chapter 4: Casting 'Characters'" },
-  { id: "chapter-5", video: "content/Chapter5-The-City-as-a-Stage.mp4", x:  800, y: 2400, label: "Chapter 5: Exercise of Observation 'The Decor'" },
+  { id: "chapter-2", video: "content/Chapter2-The-City-as-a-Stage.mp4", x:  800, y: 2400, label: "Chapter 2: Reading the Scripts" },
+  { id: "chapter-3", video: "content/Chapter3-The-City-as-a-Stage.mp4", x: 2900, y: 1600, label: "Chapter 3: Observing the Rules of Space" },
+  { id: "chapter-4", video: "content/Chapter4-The-City-as-a-Stage.mp4", x: 2600, y:  420, label: "Chapter 4: Casting 'Characters'" },
+  { id: "chapter-5", video: "content/Chapter5-The-City-as-a-Stage.mp4", x:  340, y:  280, label: "Chapter 5: Exercise of Observation 'The Decor'" },
 ];
 
 // ── Hotspots ──────────────────────────────────────────────────────────────
@@ -469,25 +469,7 @@ if (isMobile) {
     });
   });
 
-  // ── Notes ──────────────────────────────────────────────────────────────
-  const addNoteBtn  = document.getElementById('add-note-btn');
-  const textarea    = document.querySelector('.field-textarea');
-  const notesList   = document.getElementById('notes-list');
 
-  if (addNoteBtn && textarea && notesList) {
-    addNoteBtn.addEventListener('click', () => {
-      const text = textarea.value.trim();
-      if (!text) return;
-
-      const item = document.createElement('div');
-      item.className = 'field-note-item';
-      item.textContent = text;
-      notesList.appendChild(item);
-
-      textarea.value = '';
-      textarea.focus();
-    });
-  }
 
   // ── Overlay grid canvas ────────────────────────────────────────────────
   const overlayGridCanvas = document.getElementById('mobile-overlay-grid');
