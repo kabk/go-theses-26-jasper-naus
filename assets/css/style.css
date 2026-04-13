@@ -176,6 +176,13 @@ html, body {
   transform: scale(1.012);
 }
 
+/* Disable chapter hover while the report drawer is open */
+body.report-open .chapter:hover img,
+body.report-open .chapter:hover video {
+  filter: grayscale(15%);
+  transform: scale(1);
+}
+
 .chapter-label {
   font-family: var(--font-mono);
   font-size: 10px;
@@ -183,6 +190,40 @@ html, body {
   text-transform: uppercase;
   color: var(--color-ink-mid);
   margin-top: 8px;
+}
+
+/* ── Chapter play hint overlay ───────────────────────────────── */
+.chapter-hint {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 360px;         /* matches the video height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.35s ease;
+  z-index: 10;
+}
+
+.chapter-hint-pill {
+  background: rgba(245, 244, 240, 0.6);
+  /* backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px); */
+  border: 1px solid rgba(245, 244, 240, 0.4);
+  border-radius: 40px;
+  padding: 12px 24px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+}
+
+.chapter-hint.hidden {
+  opacity: 0;
 }
 
 /* ── Intro overlay ───────────────────────────────────────────── */
@@ -246,10 +287,16 @@ html, body {
   width: 180px;
   height: 135px;
   border: 1px solid var(--color-ink-faint);
-  z-index: 100;
+  z-index: 300;
   overflow: hidden;
   cursor: crosshair;
   pointer-events: all;
+  transition: right 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Shift minimap left when report drawer is open */
+body.report-open #minimap {
+  right: calc(680px + 32px);
 }
 
 #minimap-dot {
@@ -296,7 +343,18 @@ html, body {
   flex-direction: column;
   align-items: flex-end;
   gap: 6px;
-  z-index: 100;
+  z-index: 300;
+  transition: right 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Shift buttons left when report drawer is open */
+body.report-open #ui-buttons {
+  right: calc(680px + 224px);
+}
+
+/* Shift info panel left when report drawer is open */
+body.report-open #panel-info {
+  right: calc(680px + 32px);
 }
 
 .ui-btn {
@@ -331,6 +389,7 @@ html, body {
   padding: 28px 28px 24px;
   z-index: 200;
   overflow-y: auto;
+  transition: opacity 0.35s ease, transform 0.35s ease, right 0.5s cubic-bezier(0.22, 1, 0.36, 1);
   opacity: 0;
   pointer-events: none;
   transform: translateY(10px);
@@ -416,50 +475,86 @@ html, body {
 .panel-content a:hover {
   border-color: var(--color-ink);
 }
-/* Report main title */
+/* Report main title — treated as a proper masthead */
 .report-main-title {
   font-family: var(--font-mono);
-  font-size: 18px;
-  letter-spacing: -0.01em;
+  font-size: 44px;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
   color: var(--color-ink);
-  margin: 0 0 4px 0;
+  margin: 0 0 12px 0;
 }
 
-/* Report panel layout ─────────────────────────────────────── */
+/* Report panel layout — full-height right drawer ──────────── */
 #panel-report {
+  /* Override the shared .panel positioning */
+  bottom: auto;
+  right: 0;
+  top: 0;
+  width: min(680px, 100vw);
+  max-height: 100vh;
+  height: 100vh;
+  background: var(--color-background);
+  border-left: 1px solid var(--color-ink-faint);
+  border-top: 3px solid var(--color-ink);
+  border-right: none;
+  border-bottom: none;
+  border-radius: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  padding: 0;
+  transform: translateX(100%);
+  opacity: 1;
+  pointer-events: none;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: -16px 0 64px rgba(26, 26, 26, 0.10);
+  z-index: 200;
+}
+
+#panel-report.open {
+  transform: translateX(0);
+  pointer-events: all;
+  opacity: 1;
 }
 
 #panel-report .panel-close {
   position: absolute;
-  top: 12px;
-  right: 16px;
+  top: 16px;
+  left: 20px;
+  right: auto;
   z-index: 10;
+  font-size: 18px;
+  color: var(--color-ink-mid);
+  opacity: 0.5;
+  transition: opacity 0.2s ease;
+}
+
+#panel-report .panel-close:hover {
+  opacity: 1;
+  color: var(--color-ink);
 }
 
 /* Sticky index nav */
 .report-index {
   position: sticky;
   top: 0;
-  background: rgba(245, 244, 240, 0.95);
-  backdrop-filter: blur(6px);
+  background: rgba(245, 244, 240, 0.97);
+  backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--color-ink-faint);
-  padding: 12px 28px;
+  padding: 14px 52px 14px 60px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-auto-flow: column;
   grid-template-rows: repeat(4, auto);
-  gap: 4px 14px;
+  gap: 5px 24px;
   z-index: 5;
   flex-shrink: 0;
 }
 
 .report-index a {
   font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.08em;
+  font-size: 10px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--color-ink-mid);
   text-decoration: none;
@@ -473,21 +568,29 @@ html, body {
 
 /* Report content area */
 #panel-report .panel-content {
-  padding: 24px 28px 32px;
+  padding: 40px 60px 72px;
   overflow-y: auto;
   flex: 1;
+  gap: 0;
+}
+
+/* Body text — deliberate reading size */
+#panel-report .panel-content p {
+  font-size: 18px;
+  line-height: 1.9;
+  margin: 0 0 24px 0;
 }
 
 /* Section headings */
 .report-heading {
   font-family: var(--font-mono) !important;
-  font-size: 22px !important;
-  letter-spacing: -0.01em !important;
+  font-size: 30px !important;
+  letter-spacing: -0.025em !important;
   text-transform: none !important;
   color: var(--color-ink) !important;
-  margin-top: 40px !important;
-  margin-bottom: 16px !important;
-  padding-top: 24px;
+  margin-top: 64px !important;
+  margin-bottom: 24px !important;
+  padding-top: 36px;
   border-top: 1px solid var(--color-ink-faint);
 }
 
@@ -500,10 +603,10 @@ section:first-of-type .report-heading {
 /* Footnotes */
 .footnotes {
   font-family: var(--font-mono);
-  font-size: 10px;
-  line-height: 1.7;
+  font-size: 12px;
+  line-height: 1.75;
   color: var(--color-ink-mid);
-  margin: 20px 0 0 0;
+  margin: 24px 0 0 0;
   padding-left: 20px;
   list-style-type: decimal;
 }

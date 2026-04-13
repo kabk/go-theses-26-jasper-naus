@@ -3,24 +3,53 @@ const panels = document.querySelectorAll('.panel');
 
 function closeAllPanels() {
   panels.forEach(p => p.classList.remove('open'));
+  document.body.classList.remove('report-open');
 }
 
 document.getElementById('btn-info').addEventListener('click', () => {
-  const panel = document.getElementById('panel-info');
-  const isOpen = panel.classList.contains('open');
-  closeAllPanels();
-  if (!isOpen) panel.classList.add('open');
+  const infoPanel  = document.getElementById('panel-info');
+  const isOpen     = infoPanel.classList.contains('open');
+  // Toggle info only — leave report drawer untouched
+  infoPanel.classList.toggle('open', !isOpen);
 });
 
 document.getElementById('btn-report').addEventListener('click', () => {
-  const panel = document.getElementById('panel-report');
+  const panel  = document.getElementById('panel-report');
   const isOpen = panel.classList.contains('open');
   closeAllPanels();
-  if (!isOpen) panel.classList.add('open');
+  if (!isOpen) {
+    panel.classList.add('open');
+    document.body.classList.add('report-open');
+  }
 });
 
 document.querySelectorAll('.panel-close').forEach(btn => {
-  btn.addEventListener('click', () => closeAllPanels());
+  btn.addEventListener('click', (e) => {
+    const target = e.currentTarget.dataset.target;
+    const panel  = document.getElementById(target);
+    panel.classList.remove('open');
+    if (target === 'panel-report') {
+      document.body.classList.remove('report-open');
+    }
+  });
+});
+
+// Clicking the open world closes everything
+document.getElementById('world').addEventListener('click', () => {
+  closeAllPanels();
+});
+
+// ── Smooth scroll for report index links ──────────────────────────────────
+document.querySelectorAll('.report-index a').forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const targetId   = link.getAttribute('href').slice(1);
+    const target     = document.getElementById(targetId);
+    const scrollArea = document.querySelector('#panel-report .panel-content');
+    if (!target || !scrollArea) return;
+    const targetTop  = target.offsetTop - scrollArea.offsetTop;
+    scrollArea.scrollTo({ top: targetTop, behavior: 'smooth' });
+  });
 });
 
 // ── Constants ─────────────────────────────────────────────────────────────
@@ -117,14 +146,24 @@ CHAPTERS.forEach((ch) => {
   // Show first frame immediately
   video.load();
 
+  // Play hint overlay
+  const hint = document.createElement('div');
+  hint.className = 'chapter-hint';
+  const hintPill = document.createElement('div');
+  hintPill.className = 'chapter-hint-pill';
+  hintPill.textContent = 'Hover & Click to Play';
+  hint.appendChild(hintPill);
+
   // Unmute + play on hover; mute + pause on leave
   wrap.addEventListener('mouseenter', () => {
     video.muted = false;
     video.play();
+    hint.classList.add('hidden');
   });
   wrap.addEventListener('mouseleave', () => {
     video.pause();
     video.muted = true;
+    hint.classList.remove('hidden');
   });
 
   const label = document.createElement('div');
@@ -132,6 +171,7 @@ CHAPTERS.forEach((ch) => {
   label.textContent = ch.label;
 
   wrap.appendChild(video);
+  wrap.appendChild(hint);
   wrap.appendChild(label);
   stage.appendChild(wrap);
 });
